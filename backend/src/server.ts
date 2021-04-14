@@ -1,8 +1,16 @@
 import express from "express";
 import http from "http";
+import mongoose from "mongoose";
+
+/** Helpers */
 import loggers from "./utils/loggers";
 import config from "./config";
+
+/** Routes */
 import testRoute from "./routers/test";
+import productsRoute from "./routers/products";
+// import { Product } from "./models/product";
+// import { IProduct } from "./interfaces/product";
 
 const {
   server: { hostname, port },
@@ -11,6 +19,24 @@ const {
 const NAMESPACE = "Server";
 
 const router = express();
+
+/** Connect to MongoDB */
+mongoose
+  .connect(config.mongo.url, config.mongo.options)
+  .then(() => {
+    loggers.info(NAMESPACE, `⚡ Connected to MongoDB`);
+  })
+  .catch((error) => {
+    loggers.error(NAMESPACE, "MongoDB connection failed");
+  });
+
+// Product.create<IProduct>({
+//   name: "product1",
+//   description: "product1 description",
+//   price: 10,
+//   countInStock: 10,
+//   imgURLs: ["https://picsum.photos/300/200"],
+// });
 
 /** Logging requests */
 router.use((req, res, next) => {
@@ -42,10 +68,7 @@ router.use((req, res, next) => {
   );
 
   if (req.method === "OPTIONS") {
-    res.header(
-      "Access-Control-Allow-Methods",
-      "GET PATCH DELETE POST PUT"
-    );
+    res.header("Access-Control-Allow-Methods", "GET PATCH DELETE POST PUT");
     return res.status(200).json({ message: "options" });
   }
 
@@ -53,7 +76,8 @@ router.use((req, res, next) => {
 });
 
 /** Routes */
-router.use("/test", testRoute);
+router.use("/api/test", testRoute);
+router.use("/api/products", productsRoute);
 
 /** Error Handling */
 router.use((_, res) => {
@@ -66,8 +90,5 @@ router.use((_, res) => {
 const httpServer = http.createServer(router);
 
 httpServer.listen(port, () => {
-  loggers.info(
-    NAMESPACE,
-    `⚡️ Server running on http://${hostname}:${port}`
-  );
+  loggers.info(NAMESPACE, `⚡️ Server running on http://${hostname}:${port}`);
 });
