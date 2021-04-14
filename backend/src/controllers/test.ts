@@ -4,9 +4,9 @@ import loggers from "../utils/loggers";
 const NAMESPACE = "test";
 
 export const ping = (
-  req: Request,
+  _: Request,
   res: Response,
-  next: NextFunction
+  __: NextFunction
 ) => {
   loggers.info(NAMESPACE, "");
 
