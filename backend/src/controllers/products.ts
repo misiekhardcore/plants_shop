@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { IProduct } from "src/interfaces/product";
+import { IProduct } from "../interfaces/product";
 import { Product } from "../models/product.model";
-import loggers from "../utils/loggers";
+import loggings from "../utils/loggers";
 
 const NAMESPACE = "products";
 
@@ -11,10 +11,10 @@ export const getAllProducts = async (
 ): Promise<void> => {
   try {
     const products = await Product.find({});
-    loggers.info(NAMESPACE, "get all products");
+    loggings.info(NAMESPACE, "get all products");
     res.status(200).json(products);
   } catch (error) {
-    loggers.error(NAMESPACE, error.message);
+    loggings.error(NAMESPACE, error.message);
     res.status(500).json({ message: "server error", error });
   }
 };
@@ -28,10 +28,10 @@ export const getOneProduct = async (
     const { id } = req.params;
     const product = await Product.findById(id);
     if (!product) return next();
-    loggers.info(NAMESPACE, "get one product");
+    loggings.info(NAMESPACE, "get one product");
     res.status(200).json(product);
   } catch (error) {
-    loggers.error(NAMESPACE, error.message);
+    loggings.error(NAMESPACE, error.message);
   }
 };
 
@@ -47,11 +47,11 @@ export const createProduct = async (
     res.status(201).json(product);
   } catch (error) {
     if (error.errors.description.kind === "required") {
-      loggers.warn(NAMESPACE, "user input error");
+      loggings.warn(NAMESPACE, "user input error");
       res.status(400).json({ message: "user input error", error });
       return;
     }
-    loggers.error(NAMESPACE, error.message);
+    loggings.error(NAMESPACE, error.message);
     res.status(500).json({ message: "server error", error });
   }
 };
