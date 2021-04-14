@@ -27,11 +27,21 @@ const MONGO = {
 };
 
 const SERVER_HOSTNAME = process.env.SERVER_HOSTNAME || "localhost";
-const SERVER_PORT = process.env.PORT;
+const SERVER_PORT = +process.env.SERVER_PORT || 4000;
+const SERVER_TOKEN_EXPITETIME =
+  +process.env.SERVER_TOKEN_EXPIRETIME || 3600;
+const SERVER_TOKEN_ISSUER = process.env.SERVER_TOKEN_ISSUER || "issuer";
+const SERVER_TOKEN_SECRET =
+  process.env.SERVER_TOKEN_SECRET || "supersecretkey";
 
 const SERVER = {
   hostname: SERVER_HOSTNAME,
   port: SERVER_PORT,
+  token: {
+    expTime: SERVER_TOKEN_EXPITETIME,
+    issuer: SERVER_TOKEN_ISSUER,
+    secret: SERVER_TOKEN_SECRET,
+  },
 };
 
 const config = {
