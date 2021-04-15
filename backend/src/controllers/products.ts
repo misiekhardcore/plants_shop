@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { IProduct } from "../interfaces/product";
+import { CustomReqBody } from "src/interfaces/common";
+import { IProduct, IProductUpdate } from "../interfaces/product";
 import { Product } from "../models/product.model";
 import loggings from "../utils/loggers";
 
@@ -36,12 +37,12 @@ export const getOneProduct = async (
 };
 
 export const createProduct = async (
-  req: Request<any, any, IProduct>,
+  req: CustomReqBody<IProduct>,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
-    const product = await Product.create<IProduct>({ ...req.body });
+    const product = await Product.create<IProduct>(req.body);
     if (!product) return next();
 
     res.status(201).json(product);
@@ -54,6 +55,19 @@ export const createProduct = async (
     loggings.error(NAMESPACE, error.message);
     res.status(500).json({ message: "server error", error });
   }
+};
+
+export const updateProduct = async (
+  req: CustomReqBody<IProductUpdate>,
+  res: Response<IProduct>,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    await Product.updateOne({ _id: req.body._id }, req.body);
+    const product = await Product.findById(req.body._id);
+    if (!product) return next();
+    res.status(200).json(product);
+  } catch (error) {}
 };
 
 export const deleteProduct = async (
