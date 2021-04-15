@@ -1,6 +1,7 @@
 import express from "express";
 import http from "http";
 import mongoose from "mongoose";
+import cors from "cors";
 
 /** Helpers */
 import loggers from "./utils/loggers";
@@ -23,7 +24,7 @@ const router = express();
 mongoose
   .connect(config.mongo.url, config.mongo.options)
   .then(() => {
-    loggers.info(NAMESPACE, `⚡ Connected to MongoDB`);
+    loggers.info(NAMESPACE, `🔥 Connected to MongoDB`);
   })
   .catch(() => {
     loggers.error(NAMESPACE, "MongoDB connection failed");
@@ -50,24 +51,26 @@ router.use((req, res, next) => {
 router.use(express.urlencoded({ extended: false }));
 router.use(express.json());
 
-/** Rules of API */
-router.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Contol-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
+// /** Rules of API */
+// router.use((req, res, next) => {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header(
+//     "Access-Contol-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+//   );
 
-  if (req.method === "OPTIONS") {
-    res.header(
-      "Access-Control-Allow-Methods",
-      "GET PATCH DELETE POST PUT"
-    );
-    return res.status(200).json({ message: "options" });
-  }
+//   if (req.method === "OPTIONS") {
+//     res.header(
+//       "Access-Control-Allow-Methods",
+//       "GET, PATCH, DELETE, POST, PUT"
+//     );
+//     return res.status(200).json({ message: "options" });
+//   }
 
-  return next();
-});
+//   return next();
+// });
+
+router.use(cors());
 
 /** Routes */
 router.use("/api/test", testRoute);
@@ -87,6 +90,6 @@ const httpServer = http.createServer(router);
 httpServer.listen(port, () => {
   loggers.info(
     NAMESPACE,
-    `⚡️ Server running on http://${hostname}:${port}`
+    `🚀 Server running on http://${hostname}:${port}`
   );
 });
