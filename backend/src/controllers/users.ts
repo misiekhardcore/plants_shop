@@ -3,6 +3,7 @@ import loggings from "../utils/loggers";
 import argon2 from "argon2";
 import { User } from "../models/user.model";
 import { signJWT } from "../middlewares/signJWT";
+import { CustomReqBody } from "src/interfaces/common";
 
 const NAMESPACE = "user";
 
@@ -17,7 +18,7 @@ export const validateToken = async (
 };
 
 export const login = async (
-  req: Request<any, any, { username: string; password: string }>,
+  req: CustomReqBody<{ username: string; password: string }>,
   res: Response,
   _: NextFunction
 ): Promise<void> => {
@@ -61,7 +62,7 @@ export const login = async (
 };
 
 export const register = async (
-  req: Request<any, any, { username: string; password: string }>,
+  req: CustomReqBody<{ username: string; password: string }>,
   res: Response,
   _: NextFunction
 ): Promise<void> => {
