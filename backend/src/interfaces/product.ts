@@ -8,6 +8,10 @@ export interface IProduct {
   imgURLs: string[];
 }
 
+export interface IProductUpdate extends IProduct {
+  _id: string;
+}
+
 export interface IProductDocument extends IProduct, Document {}
 
 export interface IProductModel extends Model<IProductDocument> {}
