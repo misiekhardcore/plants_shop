@@ -10,6 +10,10 @@ export interface IProduct extends IProductInput {
   _id: string;
 }
 
+export interface ICartProduct extends IProduct {
+  amount: number;
+}
+
 export interface Error {
   message: string;
   error?: any;
