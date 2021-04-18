@@ -2,9 +2,9 @@ import express from "express";
 import http from "http";
 import mongoose from "mongoose";
 import cors from "cors";
+import morgan from "morgan";
 
 /** Helpers */
-import loggers from "./utils/loggers";
 import config from "./config";
 
 /** Routes */
@@ -16,36 +16,19 @@ const {
   server: { hostname, port },
 } = config;
 
-const NAMESPACE = "Server";
-
 const router = express();
 
 /** Connect to MongoDB */
 mongoose
   .connect(config.mongo.url, config.mongo.options)
   .then(() => {
-    loggers.info(NAMESPACE, `🔥 Connected to MongoDB`);
+    console.log("🔥 Connected to MongoDB");
   })
   .catch(() => {
-    loggers.error(NAMESPACE, "MongoDB connection failed");
+    console.error("Error when conneting to MongoDB");
   });
 
-/** Logging requests */
-router.use((req, res, next) => {
-  loggers.info(
-    NAMESPACE,
-    `[${req.method}] [${req.url}][${req.socket.remoteAddress}]`
-  );
-
-  res.on("finish", () => {
-    loggers.info(
-      NAMESPACE,
-      `[${req.method}] [${req.url}][${req.socket.remoteAddress}][${res.statusCode}]`
-    );
-  });
-
-  return next();
-});
+router.use(morgan("dev"));
 
 /** Parse requests */
 router.use(express.urlencoded({ extended: false }));
@@ -75,7 +58,7 @@ router.use(cors());
 /** Routes */
 router.use("/api/test", testRoute);
 router.use("/api/products", productsRoute);
-router.use("/api/user", userRouter);
+router.use("/api/users", userRouter);
 
 /** Error Handling */
 router.use((_, res) => {
@@ -88,8 +71,5 @@ router.use((_, res) => {
 const httpServer = http.createServer(router);
 
 httpServer.listen(port, () => {
-  loggers.info(
-    NAMESPACE,
-    `🚀 Server running on http://${hostname}:${port}`
-  );
+  console.log(`🚀 Server running on http://${hostname}:${port}`);
 });
