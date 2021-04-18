@@ -1,5 +1,5 @@
 import express from "express";
-import { extractJWT } from "../middlewares/extractJWT";
+import { authUser } from "../middlewares/auth";
 import {
   getUsers,
   login,
@@ -8,9 +8,9 @@ import {
 } from "../controllers/users";
 
 const router = express.Router();
-router.get("/", extractJWT, getUsers);
+router.get("/", authUser, getUsers);
 router.post("/login", login);
 router.post("/register", register);
-router.get("/validate", extractJWT, validateToken);
+router.get("/validate", authUser, validateToken);
 
 export default router;
