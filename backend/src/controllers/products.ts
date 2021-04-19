@@ -3,7 +3,7 @@ import { CustomReqBody, Error } from "src/interfaces/common";
 import { IProduct, IProductUpdate } from "../interfaces/product";
 import { Product } from "../models/product.model";
 
-const a = {
+const SortBy = {
   NONE: {},
   PA: { price: "asc" },
   PD: { price: "desc" },
@@ -11,18 +11,21 @@ const a = {
   ND: { name: "desc" },
 };
 
-type sortBY = keyof typeof a;
+type sortByEnum = keyof typeof SortBy;
 
 export const getAllProducts = async (
-  req: CustomReqBody<{ limit?: number; offset?: number; sortBy?: sortBY }>,
+  req: Request,
   res: Response<IProduct[] | Error>
 ): Promise<void> => {
   try {
-    const { limit = 20, offset = 0, sortBy = "NONE" } = req.body;
+    const limit: number = +(req.query.limit || 20);
+    const offset: number = +(req.query.offset || 0);
+    const sortBy: sortByEnum = (req.query.sortBy as sortByEnum) || "NONE";
+
     const products = await Product.find({})
-      .sort(a[sortBy])
-      .limit(limit)
-      .skip(offset);
+      .sort(SortBy[sortBy])
+      .limit(+limit)
+      .skip(+offset);
     res.status(200).json(products);
   } catch (error) {
     res.status(500).json({ message: "server error", error });
