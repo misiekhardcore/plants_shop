@@ -20,9 +20,15 @@ export const Product: React.FC<ProductProps> = ({ product }) => {
           alt={name}
         />
       </div>
-      <h2 className="product__title">{name}</h2>
+      <h2 className="product__title" title={name}>
+        {name.slice(0, 10) + "..."}
+      </h2>
       <p className="product__price">{price}</p>
-      <button onClick={() => dispatch(addToCart({...product,amount:1}))}>Add to cart</button>
+      <button
+        onClick={() => dispatch(addToCart({ ...product, amount: 1 }))}
+      >
+        Add to cart
+      </button>
     </div>
   );
 };
