@@ -11,12 +11,15 @@ import config from "./config";
 import testRoute from "./routers/test";
 import productsRoute from "./routers/products";
 import userRouter from "./routers/users";
+// import { importData } from "./import";
+// importData()
 
 const {
   server: { hostname, port },
 } = config;
 
 const router = express();
+
 
 /** Connect to MongoDB */
 mongoose
