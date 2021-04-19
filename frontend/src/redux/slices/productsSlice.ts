@@ -4,7 +4,8 @@ import {
   SerializedError,
 } from "@reduxjs/toolkit";
 import axios from "axios";
-import { IProduct, IProductInput } from "../../types/types";
+import { API_URI } from "../../config";
+import { IProduct, IProductInput, sortByEnum } from "../../types/types";
 import { RootState } from "../store";
 
 export interface ProductsState {
@@ -30,15 +31,16 @@ const initialState: ProductsState = {
 
 export const getAllProducts = createAsyncThunk<
   IProduct[],
-  { sortBy?: string; limit?: number; offset?: number },
+  { sortBy?: sortByEnum; limit?: number; offset?: number },
   { rejectValue: SerializedError }
 >(
   "products/getAllProducts",
-  async ({ limit, offset, sortBy }, { rejectWithValue }) => {
+  async ({ limit=0, offset=0, sortBy="NONE" }, { rejectWithValue }) => {
     try {
+      console.log(`${API_URI}products`);
       const response = await axios.get<IProduct[]>(
-        "http://localhost:4000/api/products",
-        { data: { limit, offset, sortBy } }
+        `${API_URI}products`,
+        { params: { limit, offset, sortBy } }
       );
       return response.data;
     } catch (error) {
@@ -51,54 +53,63 @@ export const getOneProduct = createAsyncThunk<
   IProduct,
   { id: string },
   { state: RootState; rejectValue: SerializedError }
->("products/getOneProduct", async ({ id }, { getState, rejectWithValue }) => {
-  const {
-    products: { productDetails },
-  } = getState();
-  try {
-    if (productDetails._id !== id) {
-      const response = await axios.get<IProduct>(
-        `http://localhost:4000/api/products/${id}`
-      );
-      return response.data;
+>(
+  "products/getOneProduct",
+  async ({ id }, { getState, rejectWithValue }) => {
+    const {
+      products: { productDetails },
+    } = getState();
+    try {
+      if (productDetails._id !== id) {
+        const response = await axios.get<IProduct>(
+          `${API_URI}products/${id}`
+        );
+        return response.data;
+      }
+      return productDetails;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
     }
-    return productDetails;
-  } catch (error) {
-    return rejectWithValue(error.response.data);
   }
-});
+);
 
 export const createProduct = createAsyncThunk<
   IProduct,
   { product: IProductInput },
   { rejectValue: SerializedError }
->("products/createProduct", async ({ product }, { rejectWithValue }) => {
-  try {
-    const response = await axios.post<IProduct>(
-      "http://localhost:4000/api/products",
-      product
-    );
-    return response.data;
-  } catch (error) {
-    return rejectWithValue(error.response.data);
+>(
+  "products/createProduct",
+  async ({ product }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post<IProduct>(
+        "http://localhost:4000/api/products",
+        product
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
   }
-});
+);
 
 export const updateProduct = createAsyncThunk<
   IProduct,
   { product: IProduct },
   { rejectValue: SerializedError }
->("products/updateProduct", async ({ product }, { rejectWithValue }) => {
-  try {
-    const response = await axios.put<IProduct>(
-      "http://localhost:4000/api/products",
-      product
-    );
-    return response.data;
-  } catch (error) {
-    return rejectWithValue(error.response.data);
+>(
+  "products/updateProduct",
+  async ({ product }, { rejectWithValue }) => {
+    try {
+      const response = await axios.put<IProduct>(
+        "http://localhost:4000/api/products",
+        product
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
   }
-});
+);
 
 export const deleteProduct = createAsyncThunk<
   boolean,
