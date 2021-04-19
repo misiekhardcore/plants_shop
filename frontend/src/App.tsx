@@ -5,8 +5,7 @@ import { getAllProducts, selectProducts } from "./redux/slices/productsSlice";
 
 import "./App.scss";
 import { selectCart } from "./redux/slices/cartSlice";
-import getTotalAmount from "./redux/utils/getTotalAmount";
-import getTotalPrice from "./redux/utils/getTotalPrice";
+import { CartProduct } from "./components/CartProduct";
 
 interface AppProps {}
 
@@ -15,10 +14,11 @@ const App: React.FC<AppProps> = () => {
   const { error, loading, products } = useAppSelector(selectProducts);
   const cart = useAppSelector(selectCart);
   useEffect(() => {
-    dispatch(getAllProducts());
+    dispatch(getAllProducts({limit:5}));
   }, [dispatch]);
   return (
     <div className="container">
+      <h2>Products</h2>
       {loading && <p>Loading...</p>}
       {products && (
         <div className="products">
@@ -28,13 +28,13 @@ const App: React.FC<AppProps> = () => {
         </div>
       )}
       {error && <p>{error.message}</p>}
-      <div className="">
+      <h2>Cart</h2>
+      {!cart.length && <p>Cart is empty</p>}
+      <ul className="cartproducts">
         {cart.map((c) => (
-          <p>{`${c._id} ${c.amount}`}</p>
+          <CartProduct product={c} />
         ))}
-      </div>
-      <p>{getTotalAmount(cart)}</p>
-      <p>${getTotalPrice(cart)}</p>
+      </ul>
     </div>
   );
 };
