@@ -30,18 +30,22 @@ const initialState: ProductsState = {
 
 export const getAllProducts = createAsyncThunk<
   IProduct[],
-  void,
+  { sortBy?: string; limit?: number; offset?: number },
   { rejectValue: SerializedError }
->("products/getAllProducts", async (_, { rejectWithValue }) => {
-  try {
-    const response = await axios.get<IProduct[]>(
-      "http://localhost:4000/api/products"
-    );
-    return response.data;
-  } catch (error) {
-    return rejectWithValue(error.response.data);
+>(
+  "products/getAllProducts",
+  async ({ limit, offset, sortBy }, { rejectWithValue }) => {
+    try {
+      const response = await axios.get<IProduct[]>(
+        "http://localhost:4000/api/products",
+        { data: { limit, offset, sortBy } }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
   }
-});
+);
 
 export const getOneProduct = createAsyncThunk<
   IProduct,
