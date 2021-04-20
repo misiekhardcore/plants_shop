@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { useAppDispatch } from "../hooks/hooks";
 import { addToCart } from "../redux/slices/cartSlice";
 import { IProduct } from "../types/types";
@@ -11,19 +12,21 @@ interface ProductProps {
 
 export const Product: React.FC<ProductProps> = ({ product }) => {
   const dispatch = useAppDispatch();
-  const { name, imgURLs, price, description } = product;
+  const { _id, name, imgURLs, price, description } = product;
   return (
     <div className="product__card">
-      <div
-        className="product__image"
-        style={{
-          backgroundImage: `url(${
-            imgURLs[0] || "https://picsum.photos/id/111/300/200"
-          })`,
-        }}
-      >
-        <div className="dummy"></div>
-      </div>
+      <Link to={`/products/${_id}`}>
+        <div
+          className="product__image"
+          style={{
+            backgroundImage: `url(${
+              imgURLs[0] || "https://picsum.photos/id/111/300/200"
+            })`,
+          }}
+        >
+          <div className="dummy"></div>
+        </div>
+      </Link>
       <div className="product__info">
         <h2 className="product__title" title={name}>
           {name}
