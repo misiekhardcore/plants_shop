@@ -10,7 +10,7 @@ export const ProductSchema = new Schema<IProductDocument>(
     countInStock: { type: Number, required: true },
     imgURLs: [{ type: String, required: true }],
     discount: { type: Number, default: 0 },
-    rating: { type: Number, default: 5 },
+    rating: { type: Number, default: 0 },
     comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
     size: {
       type: String,
@@ -28,7 +28,7 @@ export const ProductSchema = new Schema<IProductDocument>(
       default: "medium",
     },
     temperature: { type: Number, default: 20 },
-    saled: { type: Number, default: 0 },
+    sold: { type: Number, default: 0 },
   },
   {
     timestamps: true,

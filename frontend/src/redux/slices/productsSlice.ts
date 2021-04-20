@@ -5,7 +5,11 @@ import {
 } from "@reduxjs/toolkit";
 import axios from "axios";
 import { API_URI } from "../../config";
-import { IProduct, IProductInput, sortByEnum } from "../../types/types";
+import {
+  IGetProductsReq,
+  IProduct,
+  IProductInput,
+} from "../../types/types";
 import { RootState } from "../store";
 
 export interface ProductsState {
@@ -26,7 +30,7 @@ const initialState: ProductsState = {
     discount: 0,
     countInStock: 0,
     rating: 5,
-    saled: 0,
+    sold: 0,
     imgURLs: [],
     comments: [],
     size: "medium",
@@ -40,19 +44,22 @@ const initialState: ProductsState = {
 
 export const getAllProducts = createAsyncThunk<
   IProduct[],
-  { sortBy?: sortByEnum; limit?: number; offset?: number },
+  IGetProductsReq,
   { rejectValue: SerializedError }
 >(
   "products/getAllProducts",
   async (
-    { limit = 0, offset = 0, sortBy = "NONE" },
+    { limit = 0, offset = 0, sortBy = "NONE", search = {} },
     { rejectWithValue }
   ) => {
     try {
-      const response = await axios.get<IProduct[]>(
+      const response = await axios.post<IProduct[]>(
         `${API_URI}products`,
         {
-          params: { limit, offset, sortBy },
+          limit,
+          offset,
+          sortBy,
+          search,
         }
       );
       return response.data;
@@ -131,7 +138,7 @@ export const deleteProduct = createAsyncThunk<
 >("products/deleteProduct", async ({ id }, { rejectWithValue }) => {
   try {
     const response = await axios.delete<boolean>(
-      `http://localhost:4000/api/products/${id}`
+      `${API_URI}products/${id}`
     );
     return response.data;
   } catch (error) {
