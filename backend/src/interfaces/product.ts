@@ -2,6 +2,7 @@ import { Document, Model } from "mongoose";
 import { IComment } from "./comment";
 
 export type TLevels = "low" | "medium" | "high";
+export type TSizes = "small" | "medium" | "big";
 
 export interface IProduct {
   name: string;
@@ -13,6 +14,7 @@ export interface IProduct {
   discount: number;
   rating: number;
   comments: IComment[];
+  size: TSizes;
   light: TLevels;
   watering: TLevels;
   temperature: number;

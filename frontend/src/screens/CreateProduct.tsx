@@ -49,6 +49,11 @@ export const CreateProduct: React.FC = () => {
           accept=".jpg,.png,.bmp,.webp"
         />
         <Select
+          name="szie"
+          label="Plant size"
+          options={["small", "medium", "big"]}
+        />
+        <Select
           name="light"
           label="Light level"
           options={["low", "medium", "high"]}

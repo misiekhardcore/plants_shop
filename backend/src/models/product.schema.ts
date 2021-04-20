@@ -12,7 +12,16 @@ export const ProductSchema = new Schema<IProductDocument>(
     discount: { type: Number, default: 0 },
     rating: { type: Number, default: 5 },
     comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
-    light: { type: String, enum: ["low", "medium", "high"], default: "medium" },
+    size: {
+      type: String,
+      enum: ["small", "medium", "big"],
+      required: true,
+    },
+    light: {
+      type: String,
+      enum: ["low", "medium", "high"],
+      default: "medium",
+    },
     watering: {
       type: String,
       enum: ["low", "medium", "high"],

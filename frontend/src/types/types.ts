@@ -1,4 +1,5 @@
 export type TLevels = "low" | "medium" | "high";
+export type TSizes = "small" | "medium" | "big";
 
 export interface ICommentInput {
   username: string;
@@ -19,6 +20,7 @@ export interface IProductInput {
   discount?: number;
   rating?: number;
   comments?: IComment[];
+  size: TSizes;
   light: TLevels;
   watering: TLevels;
   temperature: number;
