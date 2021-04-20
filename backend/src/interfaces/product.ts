@@ -16,6 +16,7 @@ export interface IProduct {
   light: TLevels;
   watering: TLevels;
   temperature: number;
+  saled: number;
 }
 
 export interface IProductUpdate extends IProduct {
