@@ -6,6 +6,11 @@
   color: white;
   background-color: $primary-dark;
 
+  a {
+    color: inherit;
+    text-decoration: inherit;
+  }
+
   nav {
     max-width: 1200px;
     margin: 0 auto;
@@ -29,7 +34,7 @@
 
         &:hover,
         &:focus {
-          background-color: $primary;
+          background-color: $primary-light;
         }
       }
     }
