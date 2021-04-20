@@ -1,31 +1,28 @@
 import { NextFunction, Request, Response } from "express";
-import { CustomReqBody, Error } from "src/interfaces/common";
+import {
+  CustomReqBody,
+  Error,
+  IGetProductsReq,
+} from "src/interfaces/common";
 import { IProduct, IProductUpdate } from "../interfaces/product";
 import { Product } from "../models/product.model";
 
-const SortBy = {
-  NONE: {},
-  PA: { price: "asc" },
-  PD: { price: "desc" },
-  NA: { name: "asc" },
-  ND: { name: "desc" },
-};
-
-type sortByEnum = keyof typeof SortBy;
-
 export const getAllProducts = async (
-  req: Request,
+  req: CustomReqBody<IGetProductsReq>,
   res: Response<IProduct[] | Error>
 ): Promise<void> => {
   try {
-    const limit: number = +(req.query.limit || 20);
-    const offset: number = +(req.query.offset || 0);
-    const sortBy: sortByEnum = (req.query.sortBy as sortByEnum) || "NONE";
+    const {
+      limit = 10,
+      offset = 0,
+      sortBy = "NONE",
+      search = {},
+    } = req.body;
 
-    const products = await Product.find({})
-      .sort(SortBy[sortBy])
-      .limit(+limit)
-      .skip(+offset);
+    const products = await Product.find(search)
+      .sort(sortBy)
+      .limit(limit)
+      .skip(offset);
     res.status(200).json(products);
   } catch (error) {
     res.status(500).json({ message: "server error", error });

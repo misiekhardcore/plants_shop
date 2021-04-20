@@ -24,7 +24,7 @@ export interface IProductInput {
   light: TLevels;
   watering: TLevels;
   temperature: number;
-  saled?: number;
+  sold?: number;
 }
 
 export interface IProduct extends IProductInput {
@@ -51,3 +51,10 @@ export const SortBy = {
 };
 
 export type sortByEnum = keyof typeof SortBy;
+
+export interface IGetProductsReq {
+  sortBy?: sortByEnum;
+  limit?: number;
+  offset?: number;
+  search?: any;
+}
