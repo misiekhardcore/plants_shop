@@ -6,10 +6,14 @@ const MainPage: React.FC = () => {
   return (
     <>
       <Hero />
-      <ProductsSection title="Sale" />
-      <ProductsSection title="Bestsellers" />
+      <ProductsSection
+        title="Sale"
+        offset={4}
+        search={{ discount: { $gt: 0 } }}
+      />
+      {/* <ProductsSection title="Bestsellers" /> */}
     </>
   );
 };
 
-export default MainPage
+export default MainPage;
