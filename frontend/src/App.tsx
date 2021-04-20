@@ -1,35 +1,29 @@
 import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.scss";
-import { CartProduct } from "./components/CartProduct";
 import { Navbar } from "./components/Navbar";
-import { useAppSelector } from "./hooks/hooks";
-import { selectCart } from "./redux/slices/cartSlice";
-import { CreateProduct } from "./screens/CreateProduct";
-import { Hero } from "./screens/Hero";
-import { ProductsSection } from "./screens/ProductsSection";
+import CartPage from "./Pages/CartPage";
+import CreateProductPage from "./Pages/CreateProductPage";
+import MainPage from "./Pages/MainPage";
+import NoMatchPage from "./Pages/NoMatchPage";
 
 interface AppProps {}
 
 const App: React.FC<AppProps> = () => {
-  const cart = useAppSelector(selectCart);
-
   return (
-    <>
+    <Router>
       <Navbar />
-      <Hero />
-      <ProductsSection title="Sale" />
-      <ProductsSection title="Bestsellers" />
-      <div className="container">
-        <h2>Cart</h2>
-        {!cart.length && <p>Cart is empty</p>}
-        <ul className="cartproducts">
-          {cart.map((c) => (
-            <CartProduct key={c._id} product={c} />
-          ))}
-        </ul>
-      </div>
-      <CreateProduct />
-    </>
+      <Switch>
+        <Route exact path="/" component={MainPage} />
+        <Route exact path="/cart" component={CartPage} />
+        <Route
+          exact
+          path="/admin/create-product"
+          component={CreateProductPage}
+        />
+        <Route path="*" component={NoMatchPage} />
+      </Switch>
+    </Router>
   );
 };
 
