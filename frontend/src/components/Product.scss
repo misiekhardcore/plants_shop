@@ -1,7 +1,7 @@
 .product__card {
   min-width: 0;
   border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
   background-color: white;
 
   .product__image {
@@ -12,13 +12,31 @@
     background-size: cover;
     .dummy {
       margin-top: 100%;
+      padding: inherit;
+      position: relative;
+
+      .product__discount {
+        color: white;
+        position: absolute;
+        height: 6rem;
+        width: 6rem;
+        bottom: 0.5rem;
+        right: 0.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 2rem;
+        background-image: url("http://localhost:3000/discount.svg");
+        background-size: cover;
+      }
     }
   }
 
   .product__info {
     padding: 0.5rem;
 
-    .product__title,.product__description{
+    .product__title,
+    .product__description {
       margin-bottom: 2rem;
     }
 
@@ -27,6 +45,11 @@
       overflow: hidden;
       text-overflow: ellipsis;
       font-size: 1.5rem;
+
+      a {
+        color: black;
+        text-decoration: none;
+      }
     }
 
     .product__description {
@@ -34,11 +57,12 @@
     }
 
     .product__price {
+      margin-top: auto;
       display: flex;
       justify-content: space-between;
       align-items: center;
 
-      p{
+      p {
         font-size: 1.5rem;
       }
     }
@@ -49,7 +73,7 @@
       font-size: 1rem;
     }
 
-    .product__description{
+    .product__description {
       font-size: 0.75rem;
     }
   }
