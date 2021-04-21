@@ -14,38 +14,19 @@ html {
   font-size: 16px;
 }
 
-body,#root{
+body,
+#root {
   min-height: 100vh;
 }
 
-#root{
+#root {
   display: flex;
   flex-direction: column;
 }
 
-button {
-  border-radius: 4px;
-  border: 1px solid $primary-light;
-  background-color: $primary-light;
-  padding: 0.5rem 1rem;
-  color: white;
-  box-shadow: $soft-shadow;
-  font-size: 1rem;
-  transition: all 0.2s ease-in-out;
-
-  &:hover{
-    cursor: pointer;
-  }
-
-  &:hover,&:focus{
-    background-color: $primary;
-    border-color: $primary;
-    transform: translateY(-1px);
-  }
-}
-
 input,
-textarea,select {
+textarea,
+select {
   min-width: 0;
   max-width: 100%;
   border-radius: 4px;
