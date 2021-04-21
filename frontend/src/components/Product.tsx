@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useAppDispatch } from "../hooks/hooks";
 import { addToCart } from "../redux/slices/cartSlice";
 import { IProduct } from "../types/types";
+import { Button } from "./Button";
 
 import "./Product.scss";
 
@@ -49,13 +50,13 @@ export const Product: React.FC<ProductProps> = ({ product }) => {
         </p>
         <div className="product__price">
           <p>${price}</p>
-          <button
+          <Button
             onClick={() =>
               dispatch(addToCart({ ...product, amount: 1 }))
             }
           >
             Add to cart
-          </button>
+          </Button>
         </div>
       </div>
     </div>
