@@ -6,6 +6,7 @@ import CartPage from "./Pages/CartPage";
 import CreateProductPage from "./Pages/CreateProductPage";
 import MainPage from "./Pages/MainPage";
 import NoMatchPage from "./Pages/NoMatchPage";
+import ProductsPage from "./Pages/ProductsPage";
 
 interface AppProps {}
 
@@ -16,6 +17,7 @@ const App: React.FC<AppProps> = () => {
       <Switch>
         <Route exact path="/" component={MainPage} />
         <Route exact path="/cart" component={CartPage} />
+        <Route exact path="/products" component={ProductsPage} />
         <Route
           exact
           path="/admin/create-product"
