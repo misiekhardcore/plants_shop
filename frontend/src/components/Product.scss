@@ -1,17 +1,17 @@
 .product__card {
   margin: 1rem;
   min-width: 0;
-  border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  // border-radius: 8px;
+  // box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
   background-color: white;
 
   .product__image {
-    display: inline-block;
-    border-radius: 8px 8px 0 0;
+    display: flex;
 
     width: 100%;
     background-size: cover;
     .dummy {
+      width: 100%;
       margin-top: 100%;
       padding: inherit;
       position: relative;
@@ -26,9 +26,10 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        font-size: 2rem;
+        font-size: 3rem;
         background-image: url("http://localhost:3000/discount.svg");
         background-size: cover;
+        text-shadow: 0 1px 4px black;
       }
     }
   }
@@ -45,7 +46,7 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      font-size: 1.5rem;
+      font-size: 1.2rem;
 
       a {
         color: black;
