@@ -6,9 +6,9 @@ interface ButtonProps {
 
 export const Button = styled.button<ButtonProps>`
   color: ${(props) => props.theme.colors.white};
-  background-color: ${(props) => props.theme.colors.primary};
+  background-color: ${(props) => props.theme.colors.primaryLight};
   border-radius: ${(props) => props.theme.radius.small};
-  border: 1px solid ${(props) => props.theme.colors.primary};
+  border: 1px solid ${(props) => props.theme.colors.primaryLight};
   padding: ${({ size = "normal" }) => {
     switch (size) {
       case "normal":
@@ -34,7 +34,7 @@ export const Button = styled.button<ButtonProps>`
     }
   }};
 
-  transition: all 0.2s ease-in-out;
+  transition: all 0.15s ease-in-out;
 
   &:hover {
     cursor: pointer;
@@ -45,5 +45,6 @@ export const Button = styled.button<ButtonProps>`
     background-color: ${(props) => props.theme.colors.primaryDark};
     border-color: ${(props) => props.theme.colors.primaryDark};
     transform: translateY(-1px);
+    box-shadow: ${(props) => props.theme.shadow.soft};
   }
 `;
