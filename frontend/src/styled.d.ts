@@ -20,5 +20,10 @@ declare module "styled-components" {
       secondaryLight: string;
       secondaryDark: string;
     };
+
+    shadow: {
+      soft: string;
+      medium: string;
+    };
   }
 }

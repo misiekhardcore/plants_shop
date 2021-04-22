@@ -17,4 +17,8 @@ export const lightTheme: DefaultTheme = {
     secondary: "",
     secondaryDark: "",
   },
+  shadow:{
+    soft:'0 1px 4px rgba(0,0,0,0.2)',
+    medium:''
+  }
 };
