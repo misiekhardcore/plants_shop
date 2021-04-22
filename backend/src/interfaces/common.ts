@@ -9,15 +9,19 @@ export interface Error {
   error?: any;
 }
 
-export const SortBy = {
+export const CSortBy = {
   NONE: {},
   PA: { price: "asc" },
   PD: { price: "desc" },
   NA: { name: "asc" },
   ND: { name: "desc" },
+  SA: { sold: "asc" },
+  SD: { sold: "desc" },
+  RA: { rating: "asc" },
+  RD: { rating: "desc" },
 };
 
-export type sortByEnum = keyof typeof SortBy;
+export type sortByEnum = keyof typeof CSortBy;
 
 export interface IGetProductsReq {
   sortBy?: sortByEnum;
