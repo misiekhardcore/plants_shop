@@ -1,7 +1,7 @@
 import React from "react";
 import { DiscountSection } from "../screens/DiscountSection";
 import { Hero } from "../screens/Hero";
-import { ProductsSection } from "../screens/ProductsSection";
+import { ProductsSection } from "../screens/BestsellersSection";
 
 const MainPage: React.FC = () => {
   return (
