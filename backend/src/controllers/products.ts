@@ -1,9 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import {
-  CustomReqBody,
-  Error,
-  IGetProductsReq,
-} from "src/interfaces/common";
+import { CustomReqBody, Error, IGetProductsReq } from "src/interfaces/common";
+import { CSortBy } from "../interfaces/common";
 import { IProduct, IProductUpdate } from "../interfaces/product";
 import { Product } from "../models/product.model";
 
@@ -12,15 +9,9 @@ export const getAllProducts = async (
   res: Response<IProduct[] | Error>
 ): Promise<void> => {
   try {
-    const {
-      limit = 10,
-      offset = 0,
-      sortBy = "NONE",
-      search = {},
-    } = req.body;
-
+    const { limit = 10, offset = 0, sortBy = "NONE", search = {} } = req.body;
     const products = await Product.find(search)
-      .sort(sortBy)
+      .sort(CSortBy[sortBy])
       .limit(limit)
       .skip(offset);
     res.status(200).json(products);
