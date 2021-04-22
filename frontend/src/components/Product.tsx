@@ -50,7 +50,7 @@ export const Product: React.FC<ProductProps> = ({ product }) => {
         </p>
         <div className="product__price">
           <p>${price}</p>
-          <Button
+          <Button size= 'small'
             onClick={() =>
               dispatch(addToCart({ ...product, amount: 1 }))
             }
