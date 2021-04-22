@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Button } from "../components/Button";
 import "./Hero.scss";
 
 export const Hero: React.FC = () => {
@@ -9,7 +10,7 @@ export const Hero: React.FC = () => {
       <div className="hero__cta">
         <h2>Find plants that will suit your place</h2>
         <Link to="/products">
-          <button>Start searching</button>
+          <Button>Start searching</Button>
         </Link>
         <a href="/">Check how it works</a>
       </div>
