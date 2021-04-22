@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ProductsSection } from "../screens/ProductsSection";
+import { ProductsSection } from "../screens/BestsellersSection";
 
 interface ProductsPageProps {}
 
