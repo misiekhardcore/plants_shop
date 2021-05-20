@@ -30,7 +30,7 @@ const ProductsPage: React.FC<ProductsPageProps> = () => {
         <div className="products">
           {products.map((product) => (
             <Product key={product._id} product={product} />
-          ))}{" "}
+          ))}
         </div>
       </div>
       <div
