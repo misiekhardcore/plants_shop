@@ -11,6 +11,7 @@ import CartPage from "./Pages/CartPage";
 import CreateProductPage from "./Pages/CreateProductPage";
 import MainPage from "./Pages/MainPage";
 import NoMatchPage from "./Pages/NoMatchPage";
+import { ProductPage } from "./Pages/ProductPage";
 import ProductsPage from "./Pages/ProductsPage";
 import { lightTheme } from "./theme";
 
@@ -25,6 +26,7 @@ const App: React.FC<AppProps> = () => {
           <Route exact path="/" component={MainPage} />
           <Route exact path="/cart" component={CartPage} />
           <Route exact path="/products" component={ProductsPage} />
+          <Route exact path="/products/:id" component={ProductPage} />
           <Route
             exact
             path="/admin/create-product"
