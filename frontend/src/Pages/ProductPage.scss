@@ -1,0 +1,30 @@
+.product__header {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin-bottom: 2rem;
+
+  .product__images {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 400px 200px;
+    gap: 0.5rem;
+
+    img {
+      max-width: 100%;
+      max-height: 100%;
+      min-width: 100%;
+      object-fit: cover;
+    }
+
+    .image__main {
+      width: 100%;
+    }
+
+    .image__others {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+    }
+  }
+}
