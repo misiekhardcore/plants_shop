@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button } from "../components/Button";
 import { Product } from "../components/Product";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
+import { usePageTitle } from "../hooks/usePageTitle";
 import { getAllProducts, selectProducts } from "../redux/slices/productsSlice";
 
 interface ProductsPageProps {}
@@ -19,6 +20,8 @@ const ProductsPage: React.FC<ProductsPageProps> = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [offset]);
+
+  usePageTitle();
 
   if (loading) return <h3>Loading...</h3>;
 
