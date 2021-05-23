@@ -29,6 +29,11 @@ export interface IProductInput {
 
 export interface IProduct extends IProductInput {
   _id: string;
+  countInStock: number;
+  discount: number;
+  rating: number;
+  sold: number;
+  comments: IComment[];
 }
 
 export interface ICartProduct extends IProduct {
