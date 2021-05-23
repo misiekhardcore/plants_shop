@@ -3,7 +3,10 @@ import { Button } from "../components/Button";
 import { Product } from "../components/Product";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import { usePageTitle } from "../hooks/usePageTitle";
-import { getAllProducts, selectProducts } from "../redux/slices/productsSlice";
+import {
+  getAllProducts,
+  selectProducts,
+} from "../redux/slices/productsSlice";
 
 interface ProductsPageProps {}
 
@@ -12,9 +15,10 @@ const ProductsPage: React.FC<ProductsPageProps> = () => {
 
   const dispatch = useAppDispatch();
   const { error, loading, products } = useAppSelector(selectProducts);
-  console.log(products.map((p) => p._id));
   useEffect(() => {
-    dispatch(getAllProducts({ limit: 12, offset: offset * 12, sortBy: "NA" }));
+    dispatch(
+      getAllProducts({ limit: 12, offset: offset * 12, sortBy: "NA" })
+    );
   }, [dispatch, offset]);
 
   useEffect(() => {
@@ -50,7 +54,9 @@ const ProductsPage: React.FC<ProductsPageProps> = () => {
         >
           {"<"}
         </Button>
-        <Button onClick={() => setOffset((prev) => prev + 1)}>{">"}</Button>
+        <Button onClick={() => setOffset((prev) => prev + 1)}>
+          {">"}
+        </Button>
       </div>
     </section>
   );
