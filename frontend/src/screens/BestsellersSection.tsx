@@ -20,7 +20,6 @@ export const ProductsSection: React.FC<ProductsSectionProps> = ({
 }) => {
   const dispatch = useAppDispatch();
   const { error, loading, products } = useAppSelector(selectProducts);
-  console.log(products.length);
   useEffect(() => {
     dispatch(getAllProducts({ limit, offset, search, sortBy }));
   }, [dispatch, limit, offset, sortBy]);
