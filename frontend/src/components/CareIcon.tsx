@@ -11,6 +11,13 @@ const IconContainer = styled.div`
     width: 100%;
     max-height: 100%;
   }
+
+  @media (max-width: 376px) {
+    & {
+      width: 60px;
+      height: 60px;
+    }
+  }
 `;
 
 interface CareIconProps {
