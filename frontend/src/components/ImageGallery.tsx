@@ -4,13 +4,17 @@ import { FaTimes } from "react-icons/fa";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 const GalleryContainer = styled.section`
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  right: 0;
+  bottom: 0;
   background-color: rgba(0, 0, 0, 0.8);
   overflow-y: hidden;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ImagesContainer = styled.div`
@@ -45,9 +49,7 @@ const ImageMain = styled.div`
   margin: 0 auto;
 
   img {
-    width: auto;
-    min-width: auto;
-    min-height: auto;
+    max-height: 50vh;
   }
 `;
 
@@ -110,7 +112,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
     return () => {
       document.removeEventListener("keyup", hendleKeyClose);
     };
-  }, []);
+  }, [close]);
 
   const handleImageChange = (step: -1 | 1 = 1) => {
     const max = images.length;
