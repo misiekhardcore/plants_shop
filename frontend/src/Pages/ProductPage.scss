@@ -1,10 +1,25 @@
 @import "../color";
 
+$breakpoint: 768px;
+$breakpoint2: 900px;
+
 .product__header {
   display: grid;
   grid-template-columns: 2fr 3fr;
   gap: 2rem;
   margin-bottom: 2rem;
+
+  @media (max-width: $breakpoint2) {
+    & {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: $breakpoint) {
+    & {
+      grid-template-columns: 1fr;
+    }
+  }
 
   .img {
     border-radius: 4px;
@@ -21,6 +36,23 @@
       opacity: 0.8;
     }
   }
+
+  .small {
+    @media (min-width: calc(#{$breakpoint} + 1px)) {
+      & {
+        display: none;
+      }
+    }
+  }
+
+  .large {
+    @media (max-width: $breakpoint) {
+      & {
+        display: none;
+      }
+    }
+  }
+
   .product__info {
     display: grid;
     grid-template-columns: 1fr;
@@ -35,13 +67,14 @@
       color: gray;
     }
 
-    .product__care{
+    .product__care {
       display: flex;
     }
   }
 
   .product__image {
     height: 500px;
+    position: relative;
   }
   .product__images {
     display: grid;
@@ -53,5 +86,25 @@
       object-fit: cover;
       height: 100px;
     }
+
+    @media (max-width: $breakpoint2) {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
+}
+
+.product__discount {
+  color: white;
+  position: absolute;
+  height: 6rem;
+  width: 6rem;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  background-image: url("http://localhost:3000/discount.svg");
+  background-size: cover;
+  text-shadow: 0 1px 4px black;
 }
