@@ -22,6 +22,7 @@ export const ProductsSection: React.FC<ProductsSectionProps> = ({
   const { error, loading, products } = useAppSelector(selectProducts);
   useEffect(() => {
     dispatch(getAllProducts({ limit, offset, search, sortBy }));
+    //eslint-disable-next-line
   }, [dispatch, limit, offset, sortBy]);
   return (
     <div className="container">
