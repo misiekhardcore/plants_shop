@@ -5,15 +5,9 @@ $breakpoint2: 900px;
 
 .product__header {
   display: grid;
-  grid-template-columns: 2fr 3fr;
+  grid-template-columns: 1fr 1fr;
   gap: 2rem;
   margin-bottom: 2rem;
-
-  @media (max-width: $breakpoint2) {
-    & {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
 
   @media (max-width: $breakpoint) {
     & {
@@ -38,6 +32,9 @@ $breakpoint2: 900px;
   }
 
   .small {
+    img {
+      height: 100%;
+    }
     @media (min-width: calc(#{$breakpoint} + 1px)) {
       & {
         display: none;
@@ -58,17 +55,27 @@ $breakpoint2: 900px;
     grid-template-columns: 1fr;
     gap: 2rem;
     margin-bottom: auto;
+    line-height: 1.5;
 
     .title {
       text-align: center;
-      letter-spacing: 3px;
+      font-size: 2rem;
+
+      @media (max-width: 414px) {
+        font-size: 1.5rem;
+      }
     }
     .shortDesc {
       color: gray;
     }
 
     .product__care {
+      h3 {
+        display: block;
+        width: 100%;
+      }
       display: flex;
+      justify-content: space-around;
     }
   }
 
