@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { Button } from "../components/Button";
 import { CareIcon } from "../components/CareIcon";
 import { ImageGallery } from "../components/ImageGallery";
@@ -11,8 +12,41 @@ import {
   getOneProduct,
   selectProducts,
 } from "../redux/slices/productsSlice";
+import styled from "styled-components";
 
 import "./ProductPage.scss";
+
+const RatingAndAddToCartContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  @media (max-width: 1050px) {
+    flex-direction: column;
+  }
+`;
+
+const AddToCartContainer = styled.div`
+  display: flex;
+  gap: 1rem;
+`;
+
+const PlusMinusButton = styled.button`
+  padding: 6px;
+  background: none;
+  border: none;
+
+  &:hover,
+  &:focus {
+    cursor: pointer;
+  }
+`;
+
+const Price = styled.p`
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+`;
 
 export const ProductPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -32,9 +66,7 @@ export const ProductPage: React.FC = () => {
     temperature,
     watering,
     light,
-    size,
     rating,
-    comments,
     countInStock,
     description,
   } = productDetails;
@@ -53,9 +85,9 @@ export const ProductPage: React.FC = () => {
     <div className="container">
       <div className="row">
         <section className="product__header">
-          <div className="product__image">
+          <div className="product__image large">
             <img
-              className=" img large"
+              className=" img"
               onClick={() => setToggleGallery(true)}
               src={imgURLs[pictureNumber]}
               alt={name}
@@ -67,12 +99,17 @@ export const ProductPage: React.FC = () => {
           <article className="product__info">
             <h1 className="title">{name}</h1>
             <p className="shortDesc">{description}</p>
-            <img
-              className="product__image img small"
-              onClick={() => setToggleGallery(true)}
-              src={imgURLs[pictureNumber]}
-              alt={name}
-            />
+            <div className="product__image small">
+              <img
+                className=" img"
+                onClick={() => setToggleGallery(true)}
+                src={imgURLs[pictureNumber]}
+                alt={name}
+              />
+              {discount > 0 && (
+                <div className="product__discount">-{discount}%</div>
+              )}
+            </div>
             <div className="product__images">
               {imgURLs.map((image, index) => (
                 <img
@@ -84,21 +121,51 @@ export const ProductPage: React.FC = () => {
                 />
               ))}
             </div>
+            <h3>Care info:</h3>
             <div className="product__care">
               <CareIcon type="light" level={light} />
               <CareIcon type="water" level={watering} />
               <CareIcon type="temp" temperature={temperature} />
             </div>
-            <div
-              style={{ display: "flex", justifyContent: "flex-end" }}
-            >
-              <Rating
-                rating={0}
-                style={{ marginRight: "2rem" }}
-                size="big"
-              />
-              <div style={{ display: "flex" }}>
-                <p>${price}</p>
+            <RatingAndAddToCartContainer>
+              <Rating rating={rating} size="big" />
+              <AddToCartContainer>
+                <Price>${price}</Price>
+                <div style={{ display: "flex" }}>
+                  <PlusMinusButton
+                    onClick={() =>
+                      setInputAmount((p) => (p - 1 < 1 ? p : p - 1))
+                    }
+                  >
+                    <AiOutlineMinus />
+                  </PlusMinusButton>
+                  <input
+                    style={{
+                      minWidth: "0px",
+                      width: "3rem",
+                    }}
+                    type="number"
+                    min={1}
+                    max={countInStock}
+                    step={1}
+                    value={inputAmount}
+                    onChange={(e) => setInputAmount(+e.target.value)}
+                  />
+                  <PlusMinusButton
+                    style={{
+                      background: "none",
+                      border: "none",
+                      padding: "6px",
+                    }}
+                    onClick={() =>
+                      setInputAmount((p) =>
+                        p + 1 > countInStock ? p : p + 1
+                      )
+                    }
+                  >
+                    <AiOutlinePlus />
+                  </PlusMinusButton>
+                </div>
                 <Button
                   size="normal"
                   onClick={() =>
@@ -112,37 +179,8 @@ export const ProductPage: React.FC = () => {
                 >
                   add to cart
                 </Button>
-                <button
-                  onClick={() =>
-                    setInputAmount((p) => (p - 1 < 1 ? p : p - 1))
-                  }
-                >
-                  -
-                </button>
-                <input
-                  style={{
-                    marginLeft: "1rem",
-                    minWidth: "0px",
-                    width: "3rem",
-                  }}
-                  type="number"
-                  min={1}
-                  max={countInStock}
-                  step={1}
-                  value={inputAmount}
-                  onChange={(e) => setInputAmount(+e.target.value)}
-                />
-                <button
-                  onClick={() =>
-                    setInputAmount((p) =>
-                      p + 1 > countInStock ? p : p + 1
-                    )
-                  }
-                >
-                  +
-                </button>
-              </div>
-            </div>
+              </AddToCartContainer>
+            </RatingAndAddToCartContainer>
           </article>
         </section>
         <section>
