@@ -23,7 +23,7 @@ const IconContainer = styled.div`
 interface CareIconProps {
   level?: "low" | "medium" | "high";
   temperature?: number;
-  type: "light" | "temp" | "water";
+  type: "light" | "temp" | "water" | "size";
 }
 
 export const CareIcon: React.FC<CareIconProps> = ({
@@ -32,13 +32,27 @@ export const CareIcon: React.FC<CareIconProps> = ({
   type = "light",
 }) => {
   if (temperature) {
-    if (temperature < 16) level = "low";
-    if (temperature > 23) level = "high";
+    if (temperature < 16) level = "high";
+    if (temperature > 23) level = "low";
     else level = "medium";
   }
   const img = `/assets/svg/${type}/${level}.svg`;
+  const tooltip: string = (() => {
+    switch (type) {
+      case "light":
+        return "Level of light - " + level;
+      case "size":
+        return "Size of a plant - " + level;
+      case "temp":
+        return "Low temp. tolerance - " + level;
+      case "water":
+        return "Watering - " + level;
+      default:
+        return "";
+    }
+  })();
   return (
-    <IconContainer>
+    <IconContainer title={tooltip}>
       <img src={img} alt={type} />
     </IconContainer>
   );
