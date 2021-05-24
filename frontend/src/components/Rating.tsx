@@ -1,7 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 
-const RatingContainer = styled.div<{ size?: "small" | "medium" | "big" }>`
+const RatingContainer = styled.div<{
+  size?: "small" | "medium" | "big";
+}>`
   display: flex;
   align-items: center;
   width: auto;
@@ -15,11 +17,26 @@ const RatingContainer = styled.div<{ size?: "small" | "medium" | "big" }>`
         case "medium":
           return "32px";
         case "big":
-          return "48px";
+          return "40px";
         default:
           return "32px";
       }
     }};
+
+    @media (max-width: 768px) {
+      height: ${(props) => {
+        switch (props.size) {
+          case "small":
+            return "16px";
+          case "medium":
+            return "24px";
+          case "big":
+            return "32px";
+          default:
+            return "24px";
+        }
+      }};
+    }
   }
 `;
 
@@ -29,13 +46,19 @@ interface RatingProps {
   size?: "small" | "medium" | "big";
 }
 
-export const Rating: React.FC<RatingProps> = ({ rating = 0, ...rest }) => {
+export const Rating: React.FC<RatingProps> = ({
+  rating = 0,
+  ...rest
+}) => {
   const wholes = Math.floor(rating / 2);
   const halves = rating % 2;
   const empty = 5 - wholes - halves;
 
   return (
-    <RatingContainer {...rest}>
+    <RatingContainer
+      title={`${wholes}.${halves ? "5" : "0"} / 5.0`}
+      {...rest}
+    >
       {Array(wholes)
         .fill(0)
         .map((_, i) => (
