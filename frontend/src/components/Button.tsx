@@ -47,4 +47,14 @@ export const Button = styled.button<ButtonProps>`
     transform: translateY(-1px);
     box-shadow: ${(props) => props.theme.shadow.soft};
   }
+
+  &:disabled {
+    background: gray;
+    &:hover,
+    &:focus {
+      transform: translateX(0);
+      border-color: gray;
+      cursor: default;
+    }
+  }
 `;
