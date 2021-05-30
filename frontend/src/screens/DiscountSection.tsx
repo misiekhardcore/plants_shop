@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Container, Row } from "../components/Common";
 import { Product } from "../components/Product";
 import { SliderProducts } from "../components/Slider";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
@@ -27,8 +28,8 @@ export const DiscountSection: React.FC<DiscountSectionProps> = ({
   }, [dispatch, limit, offset, sortBy]);
 
   return (
-    <div className="container">
-      <div className="row">
+    <Container>
+      <Row>
         <h2>{title}</h2>
         {loading && <p>Loading...</p>}
         {products && (
@@ -39,7 +40,7 @@ export const DiscountSection: React.FC<DiscountSectionProps> = ({
           </SliderProducts>
         )}
         {error && <p>{error.message}</p>}
-      </div>
-    </div>
+      </Row>
+    </Container>
   );
 };

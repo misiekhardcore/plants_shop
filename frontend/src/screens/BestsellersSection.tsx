@@ -1,10 +1,13 @@
 import React, { useEffect } from "react";
+import { Container, Row } from "../components/Common";
 import { Product } from "../components/Product";
 import { SliderProducts } from "../components/Slider";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
-import { getAllProducts, selectProducts } from "../redux/slices/productsSlice";
+import {
+  getBestsellerProducts,
+  selectBestsellers,
+} from "../redux/slices/bestsellerSlice";
 import { IGetProductsReq } from "../types/types";
-
 import "./ProductsSection.scss";
 
 interface ProductsSectionProps extends IGetProductsReq {
@@ -19,14 +22,15 @@ export const ProductsSection: React.FC<ProductsSectionProps> = ({
   sortBy = "SD",
 }) => {
   const dispatch = useAppDispatch();
-  const { error, loading, products } = useAppSelector(selectProducts);
+  const { error, loading, products } =
+    useAppSelector(selectBestsellers);
   useEffect(() => {
-    dispatch(getAllProducts({ limit, offset, search, sortBy }));
+    dispatch(getBestsellerProducts({ limit, offset, search, sortBy }));
     //eslint-disable-next-line
   }, [dispatch, limit, offset, sortBy]);
   return (
-    <div className="container">
-      <div className="row">
+    <Container>
+      <Row>
         <h2>{title}</h2>
         {loading && <p>Loading...</p>}
         {products && (
@@ -37,7 +41,7 @@ export const ProductsSection: React.FC<ProductsSectionProps> = ({
           </SliderProducts>
         )}
         {error && <p>{error.message}</p>}
-      </div>
-    </div>
+      </Row>
+    </Container>
   );
 };
