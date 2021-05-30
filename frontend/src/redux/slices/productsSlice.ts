@@ -14,6 +14,7 @@ import { RootState } from "../store";
 
 export interface ProductsState {
   products: IProduct[];
+  isNext: boolean;
   productDetails: IProduct;
   loading: boolean;
   error: SerializedError | undefined;
@@ -21,6 +22,7 @@ export interface ProductsState {
 
 const initialState: ProductsState = {
   products: [],
+  isNext: false,
   productDetails: {
     _id: "",
     name: "",
@@ -43,7 +45,7 @@ const initialState: ProductsState = {
 };
 
 export const getAllProducts = createAsyncThunk<
-  IProduct[],
+  { products: IProduct[]; isNext: boolean },
   IGetProductsReq,
   { rejectValue: SerializedError }
 >(
@@ -53,15 +55,15 @@ export const getAllProducts = createAsyncThunk<
     { rejectWithValue }
   ) => {
     try {
-      const response = await axios.post<IProduct[]>(
-        `${API_URI}products`,
-        {
-          limit,
-          offset,
-          sortBy,
-          search,
-        }
-      );
+      const response = await axios.post<{
+        products: IProduct[];
+        isNext: boolean;
+      }>(`${API_URI}products`, {
+        limit,
+        offset,
+        sortBy,
+        search,
+      });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -157,7 +159,8 @@ export const productsSlice = createSlice({
       })
       .addCase(getAllProducts.fulfilled, (state, action) => {
         state.loading = false;
-        state.products = action.payload;
+        state.products = action.payload.products;
+        state.isNext = action.payload.isNext;
         state.error = undefined;
       })
       .addCase(getAllProducts.rejected, (state, action) => {

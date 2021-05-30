@@ -36,13 +36,16 @@ export const getDiscountProducts = createAsyncThunk<
     { rejectWithValue }
   ) => {
     try {
-      const response = await axios.post<IProduct[]>(`${API_URI}products`, {
+      const response = await axios.post<{
+        products: IProduct[];
+        isNext: boolean;
+      }>(`${API_URI}products`, {
         limit,
         offset,
         sortBy,
         search,
       });
-      return response.data;
+      return response.data.products;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
