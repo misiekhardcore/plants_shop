@@ -99,19 +99,3 @@ $breakpoint2: 900px;
     }
   }
 }
-
-.product__discount {
-  color: white;
-  position: absolute;
-  height: 6rem;
-  width: 6rem;
-  top: 0.5rem;
-  right: 0.5rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 3rem;
-  background-image: url("http://localhost:3000/discount.svg");
-  background-size: cover;
-  text-shadow: 0 1px 4px black;
-}
