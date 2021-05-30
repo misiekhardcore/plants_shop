@@ -15,6 +15,8 @@ import {
 import styled from "styled-components";
 
 import "./ProductPage.scss";
+import { DiscountIcon } from "../components/DiscountIcon";
+import { Container, Row } from "../components/Common";
 
 const RatingAndAddToCartContainer = styled.div`
   display: flex;
@@ -31,7 +33,7 @@ const AddToCartContainer = styled.div`
   gap: 1rem;
 `;
 
-const PlusMinusButton = styled.button`
+export const PlusMinusButton = styled.button`
   padding: 6px;
   background: none;
   border: none;
@@ -82,8 +84,8 @@ export const ProductPage: React.FC = () => {
   if (error) return <h3>{JSON.stringify(error, null, 2)}</h3>;
 
   return (
-    <div className="container">
-      <div className="row">
+    <Container>
+      <Row>
         <section className="product__header">
           <div className="product__image large">
             <img
@@ -93,7 +95,7 @@ export const ProductPage: React.FC = () => {
               alt={name}
             />
             {discount > 0 && (
-              <div className="product__discount">-{discount}%</div>
+              <DiscountIcon discount={discount} position="top" />
             )}
           </div>
           <article className="product__info">
@@ -107,7 +109,7 @@ export const ProductPage: React.FC = () => {
                 alt={name}
               />
               {discount > 0 && (
-                <div className="product__discount">-{discount}%</div>
+                <DiscountIcon discount={discount} position="bottom" />
               )}
             </div>
             <div className="product__images">
@@ -189,7 +191,7 @@ export const ProductPage: React.FC = () => {
             <p>{longDescription}</p>
           </article>
         </section>
-      </div>
+      </Row>
       {toggleGallery && (
         <ImageGallery
           images={imgURLs}
@@ -197,6 +199,6 @@ export const ProductPage: React.FC = () => {
           close={() => setToggleGallery(false)}
         />
       )}
-    </div>
+    </Container>
   );
 };
