@@ -1,20 +1,34 @@
 import { NextFunction, Request, Response } from "express";
-import { CustomReqBody, Error, IGetProductsReq } from "src/interfaces/common";
+import {
+  CustomReqBody,
+  Error,
+  IGetProductsReq,
+} from "src/interfaces/common";
 import { CSortBy } from "../interfaces/common";
 import { IProduct, IProductUpdate } from "../interfaces/product";
 import { Product } from "../models/product.model";
 
 export const getAllProducts = async (
   req: CustomReqBody<IGetProductsReq>,
-  res: Response<IProduct[] | Error>
+  res: Response<{ products: IProduct[]; isNext: boolean } | Error>
 ): Promise<void> => {
   try {
-    const { limit = 10, offset = 0, sortBy = "NONE", search = {} } = req.body;
+    const {
+      limit = 10,
+      offset = 0,
+      sortBy = "NONE",
+      search = {},
+    } = req.body;
     const products = await Product.find(search)
       .sort(CSortBy[sortBy])
-      .limit(limit)
+      .limit(limit + 1)
       .skip(offset);
-    res.status(200).json(products);
+    res
+      .status(200)
+      .json({
+        products: products.slice(0, limit),
+        isNext: products.length > limit,
+      });
   } catch (error) {
     res.status(500).json({ message: "server error", error });
   }
