@@ -3,10 +3,13 @@ import styled from "styled-components";
 
 const RatingContainer = styled.div<{
   size?: "small" | "medium" | "big";
+  absolute?: boolean;
 }>`
   display: flex;
   align-items: center;
   width: auto;
+  ${(props) =>
+    props.absolute ? "position:absolute;bottom:0.5rem;" : ""}
 
   img {
     display: block;
@@ -27,7 +30,7 @@ const RatingContainer = styled.div<{
       height: ${(props) => {
         switch (props.size) {
           case "small":
-            return "16px";
+            return props.absolute ? "24px" : "16px";
           case "medium":
             return "24px";
           case "big":
@@ -42,12 +45,14 @@ const RatingContainer = styled.div<{
 
 interface RatingProps {
   rating: number;
+  absolute?: boolean;
   style?: React.CSSProperties;
   size?: "small" | "medium" | "big";
 }
 
 export const Rating: React.FC<RatingProps> = ({
   rating = 0,
+  absolute = false,
   ...rest
 }) => {
   const wholes = Math.floor(rating / 2);
@@ -56,6 +61,7 @@ export const Rating: React.FC<RatingProps> = ({
 
   return (
     <RatingContainer
+      absolute={absolute}
       title={`${wholes}.${halves ? "5" : "0"} / 5.0`}
       {...rest}
     >
