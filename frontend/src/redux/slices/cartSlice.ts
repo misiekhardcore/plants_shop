@@ -4,7 +4,9 @@ import { RootState } from "../store";
 
 export interface CartState extends ICartProduct {}
 
-const initialState: CartState[] = [];
+const initialState: CartState[] = localStorage.getItem("cart")
+  ? JSON.parse(localStorage.getItem("cart") || "")
+  : [];
 
 export const cartSlice = createSlice({
   name: "cart",
@@ -12,8 +14,9 @@ export const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action: PayloadAction<ICartProduct>) => {
       const existing = state.find((p) => p._id === action.payload._id);
+      let newCart: CartState[];
       if (existing) {
-        return state.map((p) =>
+        newCart = state.map((p) =>
           p._id === existing._id
             ? {
                 ...action.payload,
@@ -21,29 +24,45 @@ export const cartSlice = createSlice({
               }
             : p
         );
-      } else state.push(action.payload);
+      } else newCart = [...state, action.payload];
+
+      localStorage.setItem("cart", JSON.stringify(newCart));
+
+      return newCart;
     },
     removeFromCart: (state, action: PayloadAction<{ id: string }>) => {
-      return state.filter((p) => p._id !== action.payload.id);
+      const newCart = state.filter((p) => p._id !== action.payload.id);
+      
+      if (newCart.length === 0) localStorage.removeItem("cart");
+      else localStorage.setItem("cart", JSON.stringify(newCart));
+
+      return newCart;
     },
-    updateCart: (state, action: PayloadAction<ICartProduct>) => {
-      if (state.find((p) => p._id === action.payload._id))
-        return state.map((p) =>
-          p._id === action.payload._id ? action.payload : p
+    updateCart: (
+      state,
+      action: PayloadAction<{ _id: string; amount: number }>
+    ) => {
+      if (state.find((p) => p._id === action.payload._id)) {
+        const newCart = state.map((p) =>
+          p._id === action.payload._id
+            ? { ...p, amount: action.payload.amount }
+            : p
         );
+
+        localStorage.setItem("cart", JSON.stringify(newCart));
+
+        return newCart;
+      }
     },
     resetCart: (state) => {
+      localStorage.removeItem("cart");
       return (state = []);
     },
   },
 });
 
-export const {
-  addToCart,
-  removeFromCart,
-  updateCart,
-  resetCart,
-} = cartSlice.actions;
+export const { addToCart, removeFromCart, updateCart, resetCart } =
+  cartSlice.actions;
 
 export const selectCart = (state: RootState) => state.cart;
 
