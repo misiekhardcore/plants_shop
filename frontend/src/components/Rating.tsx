@@ -26,6 +26,10 @@ const RatingContainer = styled.div<{
       }
     }};
 
+    &:hover {
+      cursor: pointer;
+    }
+
     @media (max-width: 768px) {
       height: ${(props) => {
         switch (props.size) {
@@ -55,9 +59,22 @@ export const Rating: React.FC<RatingProps> = ({
   absolute = false,
   ...rest
 }) => {
-  const wholes = Math.floor(rating / 2);
-  const halves = rating % 2;
+  const roundedRating = Math.round(rating);
+  const wholes = Math.floor(roundedRating / 2);
+  const halves = roundedRating % 2;
   const empty = 5 - wholes - halves;
+
+  const stars = [
+    ...Array(wholes)
+      .fill(0)
+      .map((_) => "/assets/svg/stars/whole.svg"),
+    ...Array(halves)
+      .fill(0)
+      .map((_) => "/assets/svg/stars/half.svg"),
+    ...Array(empty)
+      .fill(0)
+      .map((_) => "/assets/svg/stars/empty.svg"),
+  ];
 
   return (
     <RatingContainer
@@ -65,21 +82,14 @@ export const Rating: React.FC<RatingProps> = ({
       title={`${wholes}.${halves ? "5" : "0"} / 5.0`}
       {...rest}
     >
-      {Array(wholes)
-        .fill(0)
-        .map((_, i) => (
-          <img key={i} src="/assets/svg/stars/whole.svg" alt="" />
-        ))}
-      {Array(halves)
-        .fill(0)
-        .map((_, i) => (
-          <img key={i} src="/assets/svg/stars/half.svg" alt="" />
-        ))}
-      {Array(empty)
-        .fill(0)
-        .map((_, i) => (
-          <img key={i} src="/assets/svg/stars/empty.svg" alt="" />
-        ))}
+      {stars.map((star, i) => (
+        <img
+          key={i}
+          src={star}
+          alt=""
+          onClick={() => console.log(i + 1)}
+        />
+      ))}
     </RatingContainer>
   );
 };
