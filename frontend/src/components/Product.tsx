@@ -75,6 +75,7 @@ const ProductPrice = styled.div`
 
   p {
     font-size: 1.5rem;
+    margin: 0;
   }
 
   @media (max-width: 500px) {
@@ -108,9 +109,9 @@ export const Product: React.FC<ProductProps> = ({ product }) => {
           }}
         >
           <Dummy>
-            {rating > 0 && (
+            {/* {rating > 0 && ( */}
               <Rating rating={rating} size="small" absolute />
-            )}
+            {/* )} */}
             {discount > 0 && (
               <DiscountIcon discount={discount} position="bottom" />
             )}
