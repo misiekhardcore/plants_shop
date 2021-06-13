@@ -1,4 +1,11 @@
 import React, { useEffect, useState } from "react";
+import {
+  BsChevronDoubleLeft,
+  BsChevronDoubleRight,
+  BsChevronLeft,
+  BsChevronRight,
+} from "react-icons/bs";
+import styled from "styled-components";
 import { Button } from "../components/Button";
 import { Container, Row } from "../components/Common";
 import { Product } from "../components/Product";
@@ -8,7 +15,6 @@ import {
   getAllProducts,
   selectProducts,
 } from "../redux/slices/productsSlice";
-import styled from "styled-components";
 
 const ProductsGrid = styled.div`
   display: grid;
@@ -33,7 +39,7 @@ const ProductsPage: React.FC<ProductsPageProps> = () => {
   const [offset, setOffset] = useState<number>(0);
 
   const dispatch = useAppDispatch();
-  const { error, loading, products, isNext } =
+  const { error, loading, products, isNext, totalCount } =
     useAppSelector(selectProducts);
   useEffect(() => {
     dispatch(
@@ -47,9 +53,23 @@ const ProductsPage: React.FC<ProductsPageProps> = () => {
 
   usePageTitle();
 
-  if (loading) return <h3>Loading...</h3>;
+  if (loading)
+    return (
+      <Container>
+        <Row>
+          <h3>Loading...</h3>
+        </Row>
+      </Container>
+    );
 
-  if (error) return <h3>{JSON.stringify(error, null, 2)}</h3>;
+  if (error)
+    return (
+      <Container>
+        <Row>
+          <h3>{JSON.stringify(error, null, 2)}</h3>
+        </Row>
+      </Container>
+    );
 
   return (
     <Container>
@@ -68,17 +88,29 @@ const ProductsPage: React.FC<ProductsPageProps> = () => {
           justifyContent: "center",
         }}
       >
+        <Button disabled={offset <= 0} onClick={() => setOffset(0)}>
+          <BsChevronDoubleLeft />
+        </Button>
         <Button
           disabled={offset <= 0}
           onClick={() => setOffset((prev) => prev - 1)}
         >
-          {"<"}
+          <BsChevronLeft />
         </Button>
+        <p>
+          {offset + 1}/{Math.ceil(totalCount / 12)}
+        </p>
         <Button
           disabled={!isNext}
           onClick={() => setOffset((prev) => prev + 1)}
         >
-          {">"}
+          <BsChevronRight />
+        </Button>
+        <Button
+          disabled={!isNext}
+          onClick={() => setOffset(Math.ceil(totalCount / 12)-1)}
+        >
+          <BsChevronDoubleRight />
         </Button>
       </div>
     </Container>
