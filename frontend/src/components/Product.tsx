@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useAppDispatch } from "../hooks/hooks";
-import { addToCart } from "../redux/slices/cartSlice";
+import { useAppDispatch, useAppSelector } from "../hooks/hooks";
+import { addToCart, selectCart } from "../redux/slices/cartSlice";
 import { IProduct } from "../types/types";
 import { Button } from "./Button";
 import { DiscountIcon } from "./DiscountIcon";
@@ -89,6 +89,7 @@ interface ProductProps {
 
 export const Product: React.FC<ProductProps> = ({ product }) => {
   const dispatch = useAppDispatch();
+  const cart = useAppSelector(selectCart);
   const {
     _id,
     name,
@@ -97,7 +98,13 @@ export const Product: React.FC<ProductProps> = ({ product }) => {
     description,
     discount = 0,
     rating = 0,
+    countInStock = 0,
   } = product;
+
+  const itemInCart = cart.find((p) => p._id === _id);
+  const isAvailable =
+    countInStock - (itemInCart ? itemInCart.amount : 0);
+
   return (
     <ProductCard>
       <Link to={`/products/${_id}`}>
@@ -110,7 +117,7 @@ export const Product: React.FC<ProductProps> = ({ product }) => {
         >
           <Dummy>
             {/* {rating > 0 && ( */}
-              <Rating rating={rating} size="small" absolute />
+            <Rating rating={rating} size="small" absolute />
             {/* )} */}
             {discount > 0 && (
               <DiscountIcon discount={discount} position="bottom" />
@@ -126,10 +133,13 @@ export const Product: React.FC<ProductProps> = ({ product }) => {
         <ProductPrice>
           <p>${price}</p>
           <Button
+            disabled={!countInStock || !isAvailable}
             size="small"
-            onClick={() =>
-              dispatch(addToCart({ ...product, amount: 1 }))
-            }
+            onClick={() => {
+              if (isAvailable) {
+                dispatch(addToCart({ ...product, amount: 1 }));
+              }
+            }}
           >
             Add to cart
           </Button>
