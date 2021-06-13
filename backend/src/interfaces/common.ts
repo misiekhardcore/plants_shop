@@ -29,3 +29,7 @@ export interface IGetProductsReq {
   offset?: number;
   search?: any;
 }
+
+export interface MongoResult {
+  _doc: any
+}
