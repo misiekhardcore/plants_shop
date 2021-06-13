@@ -7,7 +7,7 @@ import { ImageGallery } from "../components/ImageGallery";
 import { Rating } from "../components/Rating";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import { usePageTitle } from "../hooks/usePageTitle";
-import { addToCart } from "../redux/slices/cartSlice";
+import { addToCart, selectCart } from "../redux/slices/cartSlice";
 import {
   getOneProduct,
   selectProducts,
@@ -42,6 +42,10 @@ export const PlusMinusButton = styled.button`
   &:focus {
     cursor: pointer;
   }
+
+  &:disabled {
+    cursor: default;
+  }
 `;
 
 const Price = styled.p`
@@ -59,7 +63,10 @@ export const ProductPage: React.FC = () => {
   const [toggleGallery, setToggleGallery] = useState<boolean>(false);
   const [inputAmount, setInputAmount] = useState<number>(1);
 
+  const cart = useAppSelector(selectCart);
+
   const {
+    _id,
     name,
     price,
     discount,
@@ -72,6 +79,10 @@ export const ProductPage: React.FC = () => {
     countInStock,
     description,
   } = productDetails;
+
+  const itemInCart = cart.find((p) => p._id === _id);
+  const isAvailable =
+    countInStock - (itemInCart ? itemInCart.amount : 0);
 
   useEffect(() => {
     dispatch(getOneProduct({ id }));
@@ -135,6 +146,7 @@ export const ProductPage: React.FC = () => {
                 <Price>${price}</Price>
                 <div style={{ display: "flex" }}>
                   <PlusMinusButton
+                    disabled={!isAvailable || inputAmount <= 1}
                     onClick={() =>
                       setInputAmount((p) => (p - 1 < 1 ? p : p - 1))
                     }
@@ -142,18 +154,30 @@ export const ProductPage: React.FC = () => {
                     <AiOutlineMinus />
                   </PlusMinusButton>
                   <input
+                    disabled={!isAvailable}
                     style={{
                       minWidth: "0px",
                       width: "3rem",
                     }}
                     type="number"
                     min={1}
-                    max={countInStock}
+                    max={isAvailable}
                     step={1}
                     value={inputAmount}
-                    onChange={(e) => setInputAmount(+e.target.value)}
+                    onChange={(e) =>
+                      setInputAmount(
+                        +e.target.value > isAvailable
+                          ? isAvailable
+                          : +e.target.value < 1
+                          ? 1
+                          : +e.target.value
+                      )
+                    }
                   />
                   <PlusMinusButton
+                    disabled={
+                      !isAvailable || inputAmount >= isAvailable
+                    }
                     style={{
                       background: "none",
                       border: "none",
@@ -161,7 +185,7 @@ export const ProductPage: React.FC = () => {
                     }}
                     onClick={() =>
                       setInputAmount((p) =>
-                        p + 1 > countInStock ? p : p + 1
+                        p + 1 > isAvailable ? p : p + 1
                       )
                     }
                   >
@@ -169,6 +193,7 @@ export const ProductPage: React.FC = () => {
                   </PlusMinusButton>
                 </div>
                 <Button
+                  disabled={!isAvailable}
                   size="normal"
                   onClick={() =>
                     dispatch(
