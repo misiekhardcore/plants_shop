@@ -1,5 +1,6 @@
 import { Document, Model } from "mongoose";
 import { IComment } from "./comment";
+import { IRating } from "./rating";
 
 export type TLevels = "low" | "medium" | "high";
 export type TSizes = "small" | "medium" | "big";
@@ -12,7 +13,7 @@ export interface IProduct {
   countInStock: number;
   imgURLs: string[];
   discount: number;
-  rating: number;
+  rating: IRating[];
   comments: IComment[];
   size: TSizes;
   light: TLevels;

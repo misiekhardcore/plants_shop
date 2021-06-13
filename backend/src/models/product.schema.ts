@@ -10,7 +10,7 @@ export const ProductSchema = new Schema<IProductDocument>(
     countInStock: { type: Number, required: true },
     imgURLs: [{ type: String, required: true }],
     discount: { type: Number, default: 0 },
-    rating: { type: Number, default: 0 },
+    rating: [{ type: Schema.Types.ObjectId, ref: "Rating" }],
     comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
     size: {
       type: String,

@@ -10,9 +10,13 @@ import { Product } from "../models/product.model";
 
 export const getAllProducts = async (
   req: CustomReqBody<IGetProductsReq>,
-  res: Response<{ products: IProduct[]; isNext: boolean } | Error>
+  res: Response<
+    | { products: IProduct[]; isNext: boolean; totalCount: number }
+    | Error
+  >
 ): Promise<void> => {
   try {
+    const totalCount = await Product.find().count((_, c) => c);
     const {
       limit = 10,
       offset = 0,
@@ -20,15 +24,15 @@ export const getAllProducts = async (
       search = {},
     } = req.body;
     const products = await Product.find(search)
+      .populate("Rating")
       .sort(CSortBy[sortBy])
       .limit(limit + 1)
       .skip(offset);
-    res
-      .status(200)
-      .json({
-        products: products.slice(0, limit),
-        isNext: products.length > limit,
-      });
+    res.status(200).json({
+      products: products.slice(0, limit),
+      isNext: products.length > limit,
+      totalCount,
+    });
   } catch (error) {
     res.status(500).json({ message: "server error", error });
   }
