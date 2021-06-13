@@ -13,13 +13,22 @@ export const validateToken = async (
 };
 
 export const login = async (
-  req: CustomReqBody<{ username: string; password: string }>,
+  req: CustomReqBody<{ usernameOrEmail: string; password: string }>,
   res: Response,
   _: NextFunction
 ): Promise<any> => {
-  const { password, username } = req.body;
+  const { password, usernameOrEmail } = req.body;
   try {
-    const user = await User.findOne({ username });
+    if (!usernameOrEmail || !password) {
+      return res.status(400).json({
+        message: "Email/Username and/or email cannot be empty",
+      });
+    }
+
+    const user = await User.findOne({
+      $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
+    });
+
     if (!user) {
       return res.status(401).json({ message: "unauthorized" });
     }
@@ -34,36 +43,57 @@ export const login = async (
     if (!token) {
       res.status(401).json({ message: "unauthorized" });
     }
-    res
-      .status(200)
-      .header("Authorization", `Bearer ${token}`)
-      .json({ user, token });
+
+    const { password: a, ...userWithoutPassword } = user._doc;
+
+    console.log(userWithoutPassword);
+
+    res.status(200).header("Authorization", `Bearer ${token}`).json({
+      user: userWithoutPassword,
+      token,
+    });
   } catch (error) {
     res.status(500).json({ message: "server error", error });
   }
 };
 
 export const register = async (
-  req: CustomReqBody<{ username: string; password: string }>,
+  req: CustomReqBody<{
+    username: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+  }>,
   res: Response,
   _: NextFunction
 ): Promise<any> => {
   try {
-    const { username, password } = req.body;
+    const { username, email, password, confirmPassword } = req.body;
 
-    const _user = await User.findOne({ username });
+    if (password !== confirmPassword) {
+      return res.status(401).json({ message: "passwords not match" });
+    }
+
+    const _user = await User.findOne({
+      $or: [{ username }, { email }],
+    });
     if (_user) {
       return res
         .status(400)
-        .json({ message: "username already taken" });
+        .json({ message: "username or email already taken" });
     }
 
     const hashed = await argon2.hash(password);
 
-    const user = await User.create({
+    const { _id } = await User.create({
       username,
+      email,
       password: hashed,
     });
+
+    const user = await User.findById(_id).select("-password");
+
+    if (!user) return;
 
     const token = signToken(user);
     if (!token) {
