@@ -32,8 +32,16 @@ interface CartProductProps {
 export const CartProduct: React.FC<CartProductProps> = ({
   product,
 }) => {
-  const { _id, name, amount, imgURLs, price, countInStock } = product;
+  const {
+    _id,
+    name,
+    amount,
+    imgURLs = [],
+    price,
+    countInStock,
+  } = product;
   const dispatch = useAppDispatch();
+
   return (
     <Product>
       <img
@@ -46,6 +54,7 @@ export const CartProduct: React.FC<CartProductProps> = ({
       <p>${price}</p>
       <div style={{ display: "flex" }}>
         <PlusMinusButton
+          disabled={amount <= 1}
           onClick={() => {
             dispatch(
               updateCart({
@@ -68,10 +77,21 @@ export const CartProduct: React.FC<CartProductProps> = ({
           step={1}
           value={amount}
           onChange={(e) => {
-            dispatch(updateCart({ _id, amount: +e.target.value }));
+            dispatch(
+              updateCart({
+                _id,
+                amount:
+                  +e.target.value > countInStock
+                    ? countInStock
+                    : +e.target.value < 1
+                    ? 1
+                    : +e.target.value,
+              })
+            );
           }}
         />
         <PlusMinusButton
+          disabled={amount >= countInStock}
           style={{
             background: "none",
             border: "none",
