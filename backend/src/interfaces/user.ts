@@ -1,11 +1,11 @@
 import { Document, Model } from "mongoose";
-import { IProductDocument } from "./product";
+import { MongoResult } from "./common";
 
-export interface IUser {
+export interface IUser extends MongoResult {
   username: string;
   password: string;
 }
 
 export interface IUserDocument extends IUser, Document {}
 
-export interface IUserModel extends Model<IProductDocument> {}
+export interface IUserModel extends Model<IUserDocument> {}
