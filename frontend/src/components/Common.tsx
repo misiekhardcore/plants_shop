@@ -1,8 +1,10 @@
+import { Form } from "formik";
 import styled from "styled-components";
 
 export const Container = styled.section`
   width: 100%;
   position: relative;
+  flex: 1 0 auto;
 `;
 
 export const Row = styled.div`
@@ -13,4 +15,10 @@ export const Row = styled.div`
   h2 {
     margin-bottom: 1rem;
   }
+`;
+
+export const StyledForm = styled(Form)`
+  display: flex;
+  flex-direction: column;
+  position: relative;
 `;
