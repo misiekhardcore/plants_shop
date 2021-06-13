@@ -19,6 +19,10 @@ declare module "styled-components" {
       secondary: string;
       secondaryLight: string;
       secondaryDark: string;
+      danger: string;
+      info: string;
+      success: stirng;
+      warning: string;
     };
 
     shadow: {

@@ -13,12 +13,16 @@ export const lightTheme: DefaultTheme = {
     primaryLight: "#3d8831",
     primary: "#214e26",
     primaryDark: "#0B410D",
-    secondaryLight: "",
-    secondary: "",
-    secondaryDark: "",
+    secondaryLight: "#7d3cca",
+    secondary: "#4d01a8",
+    secondaryDark: "#2e075e",
+    danger: "#dc3545 ",
+    success: "#28a745",
+    warning: "#ffc107",
+    info: "#17a2b8",
   },
-  shadow:{
-    soft:'0 1px 4px rgba(0,0,0,0.2)',
-    medium:''
-  }
+  shadow: {
+    soft: "0 1px 4px rgba(0,0,0,0.2)",
+    medium: "",
+  },
 };
