@@ -23,7 +23,7 @@ export const login = async (
   try {
     if (!usernameOrEmail || !password) {
       return res.status(400).json({
-        message: "Email/Username and/or email cannot be empty",
+        message: "Email/Username and/or password cannot be empty",
       });
     }
 
@@ -103,13 +103,16 @@ export const register = async (
 
     const user = await User.findById(_id);
 
-    if (!user) return;
+    if (!user) return res.status(500).json({ message: "server error" });
 
     const token = signToken(user);
     if (!token) {
       return res.status(401).json({ message: "unauthorized" });
     }
-    res.status(201).header("Authorization", `Bearer ${token}`).json();
+    return res
+      .status(201)
+      .header("Authorization", `Bearer ${token}`)
+      .json();
   } catch (error) {
     return res.status(500).json({
       message: "server error",
