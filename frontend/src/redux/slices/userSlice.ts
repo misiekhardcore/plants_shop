@@ -55,7 +55,7 @@ export const register = createAsyncThunk<
       `${API_URI}users/register`,
       values
     );
-    return response.data;
+    return response.headers;
   } catch (error) {
     return rejectWithValue(error.response.data);
   }
@@ -95,7 +95,6 @@ export const userSlice = createSlice({
         state.loading = false;
         state.token = action.payload.authorization;
         localStorage.setItem("token", action.payload.authorization);
-
         state.error = undefined;
       })
       .addCase(register.rejected, (state, action) => {
