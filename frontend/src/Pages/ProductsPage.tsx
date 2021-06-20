@@ -33,6 +33,17 @@ const ProductsGrid = styled.div`
   } */
 `;
 
+const ButtonsContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  p {
+    margin: 0 1rem;
+  }
+`;
+
 interface ProductsPageProps {}
 
 const ProductsPage: React.FC<ProductsPageProps> = () => {
@@ -80,14 +91,7 @@ const ProductsPage: React.FC<ProductsPageProps> = () => {
           ))}
         </ProductsGrid>
       </Row>
-      <div
-        className="container row"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
+      <ButtonsContainer>
         <Button disabled={offset <= 0} onClick={() => setOffset(0)}>
           <BsChevronDoubleLeft />
         </Button>
@@ -108,11 +112,11 @@ const ProductsPage: React.FC<ProductsPageProps> = () => {
         </Button>
         <Button
           disabled={!isNext}
-          onClick={() => setOffset(Math.ceil(totalCount / 12)-1)}
+          onClick={() => setOffset(Math.ceil(totalCount / 12) - 1)}
         >
           <BsChevronDoubleRight />
         </Button>
-      </div>
+      </ButtonsContainer>
     </Container>
   );
 };
