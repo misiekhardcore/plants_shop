@@ -89,7 +89,6 @@ export const Navbar: React.FC = () => {
           console.log(response.headers);
           if (response.headers) history.push("/");
         } catch (error) {
-          console.log("error");
           dispatch(logout());
         }
       })();
