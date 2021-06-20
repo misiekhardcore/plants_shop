@@ -86,7 +86,6 @@ export const Navbar: React.FC = () => {
               authorization: token,
             },
           });
-          console.log(response.headers);
           if (response.headers) history.push("/");
         } catch (error) {
           dispatch(logout());
