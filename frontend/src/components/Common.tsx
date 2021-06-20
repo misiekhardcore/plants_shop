@@ -22,3 +22,37 @@ export const StyledForm = styled(Form)`
   flex-direction: column;
   position: relative;
 `;
+
+const LoadingContainer = styled.div`
+  position: absolute;
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.5);
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const LoadingSVG = styled.img`
+  @keyframes rotate {
+    from {
+      transform: rotateZ(0);
+    }
+    to {
+      transform: rotateZ(360deg);
+    }
+  }
+
+  filter: drop-shadow(0 0 2px #000);
+  animation: rotate linear 2s infinite;
+`;
+
+export const Loading: React.FC<{ isLoading: boolean }> = ({
+  isLoading = false,
+}) => {
+  return isLoading ? (
+    <LoadingContainer>
+      <LoadingSVG src="/assets/svg/Loading.svg" />
+    </LoadingContainer>
+  ) : null;
+};
