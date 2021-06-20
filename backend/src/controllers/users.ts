@@ -4,12 +4,14 @@ import { User } from "../models/user.model";
 import { signToken } from "../utils/signToken";
 import { CustomReqBody } from "src/interfaces/common";
 
-export const validateToken = async (
-  _: Request,
-  res: Response,
-  __: NextFunction
-) => {
-  res.status(200).json({ message: "User authorized" });
+export const validateToken = async (req: Request, res: Response) => {
+  const user = await User.findById(req.userId);
+  if (!user) return res.status(403).json({ token: null });
+  const token = signToken(user);
+  return res
+    .header("Authorization", `Bearer ${token}`)
+    .status(200)
+    .json();
 };
 
 export const login = async (
@@ -30,30 +32,32 @@ export const login = async (
     });
 
     if (!user) {
-      return res.status(401).json({ message: "unauthorized" });
+      return res
+        .status(401)
+        .json({ message: "Wrong login/email or password" });
     }
 
     const verified = await argon2.verify(user.password, password);
 
     if (!verified) {
-      res.status(401).json({ message: "unauthorized" });
+      return res
+        .status(401)
+        .json({ message: "Wrong login/email or password" });
     }
 
     const token = signToken(user);
     if (!token) {
-      res.status(401).json({ message: "unauthorized" });
+      return res
+        .status(401)
+        .json({ message: "Wrong login/email or password" });
     }
 
-    const { password: a, ...userWithoutPassword } = user._doc;
-
-    console.log(userWithoutPassword);
-
-    res.status(200).header("Authorization", `Bearer ${token}`).json({
-      user: userWithoutPassword,
-      token,
-    });
+    return res
+      .status(200)
+      .header("Authorization", `Bearer ${token}`)
+      .json();
   } catch (error) {
-    res.status(500).json({ message: "server error", error });
+    return res.status(500).json({ message: "server error", error });
   }
 };
 
@@ -69,6 +73,12 @@ export const register = async (
 ): Promise<any> => {
   try {
     const { username, email, password, confirmPassword } = req.body;
+
+    if (!username || !password || !email || !confirmPassword) {
+      return res.status(400).json({
+        message: "Username, password and/or email cannot be empty",
+      });
+    }
 
     if (password !== confirmPassword) {
       return res.status(401).json({ message: "passwords not match" });
@@ -91,7 +101,7 @@ export const register = async (
       password: hashed,
     });
 
-    const user = await User.findById(_id).select("-password");
+    const user = await User.findById(_id);
 
     if (!user) return;
 
@@ -99,10 +109,7 @@ export const register = async (
     if (!token) {
       return res.status(401).json({ message: "unauthorized" });
     }
-    res
-      .status(201)
-      .header("Authorization", `Bearer ${token}`)
-      .json({ user, token });
+    res.status(201).header("Authorization", `Bearer ${token}`).json();
   } catch (error) {
     return res.status(500).json({
       message: "server error",

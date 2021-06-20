@@ -20,7 +20,6 @@ const {
 
 const router = express();
 
-
 /** Connect to MongoDB */
 mongoose
   .connect(config.mongo.url, config.mongo.options)
@@ -56,7 +55,11 @@ router.use(express.json());
 //   return next();
 // });
 
-router.use(cors());
+router.use(
+  cors({
+    exposedHeaders: "Authorization",
+  })
+);
 
 /** Routes */
 router.use("/api/test", testRoute);
