@@ -37,9 +37,13 @@ export const RegisterPage: React.FC = () => {
               <label htmlFor="email">Email</label>
               <Field id="email" name="email" type="email" />
               <label htmlFor="password">Password</label>
-              <Field id="password" name="password" />
+              <Field id="password" name="password" type="password" />
               <label htmlFor="confirmPassword">Confirm password</label>
-              <Field id="password" name="confirmPassword" />
+              <Field
+                id="password"
+                name="confirmPassword"
+                type="password"
+              />
               <Link to="/login">Have an account already? Login</Link>
               <Button type="submit">Register</Button>
             </StyledForm>
