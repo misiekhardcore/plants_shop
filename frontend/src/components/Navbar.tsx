@@ -1,9 +1,12 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { useAppSelector } from "../hooks/hooks";
-import { selectCart } from "../redux/slices/cartSlice";
-import getTotalAmount from "../redux/utils/getTotalAmount";
+import axios from "axios";
+import React, { useEffect } from "react";
+import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
+import { API_URI } from "../config";
+import { useAppDispatch, useAppSelector } from "../hooks/hooks";
+import { selectCart } from "../redux/slices/cartSlice";
+import { logout, selectUser } from "../redux/slices/userSlice";
+import getTotalAmount from "../redux/utils/getTotalAmount";
 
 const NavbarContainer = styled.div`
   width: 100%;
@@ -67,8 +70,32 @@ const NavbarContainer = styled.div`
 `;
 
 export const Navbar: React.FC = () => {
+  const history = useHistory();
+  const dispatch = useAppDispatch();
   const cart = useAppSelector(selectCart);
+  const { token } = useAppSelector(selectUser);
+
   const totalAmount = getTotalAmount(cart);
+
+  useEffect(() => {
+    if (token) {
+      (async () => {
+        try {
+          const response = await axios.get(`${API_URI}users/validate`, {
+            headers: {
+              authorization: token,
+            },
+          });
+          console.log(response.headers);
+          if (response.headers) history.push("/");
+        } catch (error) {
+          console.log("error");
+          dispatch(logout());
+        }
+      })();
+    }
+  });
+
   return (
     <NavbarContainer>
       <nav>
@@ -87,9 +114,14 @@ export const Navbar: React.FC = () => {
           <Link to="/profile">
             <li>Profile</li>
           </Link>
-          <Link to="/login">
-            <li>Log in</li>
-          </Link>
+
+          {token ? (
+            <li onClick={() => dispatch(logout())}>Log out</li>
+          ) : (
+            <li>
+              <Link to="/login">Log in</Link>
+            </li>
+          )}
         </ul>
       </nav>
     </NavbarContainer>
