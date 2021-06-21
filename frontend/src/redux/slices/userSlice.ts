@@ -5,6 +5,7 @@ import {
 } from "@reduxjs/toolkit";
 import axios from "axios";
 import { API_URI } from "../../config";
+import { IUser } from "../../types/types";
 
 import { RootState } from "../store";
 
@@ -14,19 +15,31 @@ interface IToken {
 
 export interface UserState {
   token: string;
+  user: IUser;
   loading: boolean;
   error: SerializedError | undefined;
 }
 
+interface ILoginInput {
+  usernameOrEmail: string;
+  password: string;
+}
+
+interface IRegisterInput extends IUser {
+  password: string;
+  confirmPassword: string;
+}
+
 const initialState: UserState = {
   token: localStorage.getItem("token") || "",
+  user: { email: "", username: "" },
   loading: false,
   error: undefined,
 };
 
 export const login = createAsyncThunk<
   IToken,
-  { usernameOrEmail: string; password: string },
+  ILoginInput,
   { rejectValue: SerializedError }
 >("user/login", async (values, { rejectWithValue }) => {
   try {
@@ -42,12 +55,7 @@ export const login = createAsyncThunk<
 
 export const register = createAsyncThunk<
   IToken,
-  {
-    username: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
-  },
+  IRegisterInput,
   { state: RootState; rejectValue: SerializedError }
 >("user/register", async (values, { rejectWithValue }) => {
   try {
@@ -61,7 +69,23 @@ export const register = createAsyncThunk<
   }
 });
 
-// export const checkToken = createAsyncThunk<s
+export const getUser = createAsyncThunk<
+  IUser,
+  null,
+  {
+    state: RootState;
+    rejectValue: SerializedError;
+  }
+>("user/getUser", async (_, { rejectWithValue, getState }) => {
+  try {
+    const response = await axios.get<IUser>(`${API_URI}users/user`, {
+      headers: { authorization: getState().token.token },
+    });
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error.response.data);
+  }
+});
 
 export const userSlice = createSlice({
   name: "user",
@@ -98,6 +122,18 @@ export const userSlice = createSlice({
         state.error = undefined;
       })
       .addCase(register.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(getUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+        state.error = undefined;
+      })
+      .addCase(getUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
