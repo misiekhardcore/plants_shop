@@ -56,3 +56,12 @@ export const Loading: React.FC<{ isLoading: boolean }> = ({
     </LoadingContainer>
   ) : null;
 };
+
+export const CenterContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex: 1;
+  color: ${(props) => props.theme.colors.black};
+`;
