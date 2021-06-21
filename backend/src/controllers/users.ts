@@ -133,3 +133,17 @@ export const getUsers = async (
     res.status(500).json({ message: "server error", error });
   }
 };
+
+export const getUser = async (
+  req: Request,
+  res: Response,
+  __: NextFunction
+): Promise<void> => {
+  try {
+    const { userId } = req;
+    const user = await User.findById(userId).select("-password");
+    res.status(200).json({ user });
+  } catch (error) {
+    res.status(500).json({ message: "server error", error });
+  }
+};
