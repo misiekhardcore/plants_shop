@@ -15,6 +15,7 @@ import {
   getAllProducts,
   selectProducts,
 } from "../redux/slices/productsSlice";
+import { sortByEnum } from "../types/types";
 
 const ProductsGrid = styled.div`
   display: grid;
@@ -44,19 +45,29 @@ const ButtonsContainer = styled.div`
   }
 `;
 
+const FilterContainer = styled(Row)`
+  display: flex;
+  gap: 1rem;
+`;
+
+const Label = styled.label`
+  display: flex;
+  flex-direction: column;
+`;
+
 interface ProductsPageProps {}
 
 const ProductsPage: React.FC<ProductsPageProps> = () => {
   const [offset, setOffset] = useState<number>(0);
+  const [limit, setLimit] = useState(12);
+  const [sortBy, setSortBy] = useState<sortByEnum>("NONE");
 
   const dispatch = useAppDispatch();
   const { error, loading, products, isNext, totalCount } =
     useAppSelector(selectProducts);
   useEffect(() => {
-    dispatch(
-      getAllProducts({ limit: 12, offset: offset * 12, sortBy: "NA" })
-    );
-  }, [dispatch, offset]);
+    dispatch(getAllProducts({ limit, offset: offset * limit, sortBy }));
+  }, [dispatch, offset, limit, sortBy]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -84,6 +95,46 @@ const ProductsPage: React.FC<ProductsPageProps> = () => {
 
   return (
     <Container>
+      <FilterContainer>
+        <Label>
+          On page:
+          <select
+            value={limit}
+            name="limit"
+            id="limit"
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+              setLimit(+e.target.value)
+            }
+          >
+            <option value="12">12</option>
+            <option value="24">24</option>
+            <option value="36">36</option>
+            <option value="48">48</option>
+          </select>
+        </Label>
+        <Label>
+          Sort by:
+          <select
+            style={{ width: "100%" }}
+            value={sortBy}
+            name="sortBy"
+            id="sortBy"
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+              setSortBy(e.target.value as sortByEnum)
+            }
+          >
+            <option value="NONE">None</option>
+            <option value="NA">Name ascending</option>
+            <option value="ND">Name descending</option>
+            <option value="PA">Price Ascending</option>
+            <option value="PD">Price Descending</option>
+            <option value="RA">Rating ascending</option>
+            <option value="RD">Rating descending</option>
+            <option value="SA">Popularity ascending</option>
+            <option value="SD">Popularity descending</option>
+          </select>
+        </Label>
+      </FilterContainer>
       <Row>
         <ProductsGrid>
           {products.map((product) => (
@@ -102,7 +153,7 @@ const ProductsPage: React.FC<ProductsPageProps> = () => {
           <BsChevronLeft />
         </Button>
         <p>
-          {offset + 1}/{Math.ceil(totalCount / 12)}
+          {offset + 1}/{Math.ceil(totalCount / limit)}
         </p>
         <Button
           disabled={!isNext}
@@ -112,7 +163,7 @@ const ProductsPage: React.FC<ProductsPageProps> = () => {
         </Button>
         <Button
           disabled={!isNext}
-          onClick={() => setOffset(Math.ceil(totalCount / 12) - 1)}
+          onClick={() => setOffset(Math.ceil(totalCount / limit) - 1)}
         >
           <BsChevronDoubleRight />
         </Button>
