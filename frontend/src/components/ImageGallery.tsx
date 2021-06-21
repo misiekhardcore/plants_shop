@@ -11,7 +11,7 @@ const GalleryContainer = styled.section`
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.8);
   overflow-y: hidden;
-  z-index: 100;
+  z-index: 1000;
   display: flex;
   justify-content: center;
   align-items: center;
