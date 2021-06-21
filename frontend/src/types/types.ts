@@ -40,6 +40,12 @@ export interface ICartProduct extends IProduct {
   amount: number;
 }
 
+export interface IUser {
+  username: string;
+  email: string;
+  password?: string;
+}
+
 export interface Error {
   message: string;
   error?: any;
