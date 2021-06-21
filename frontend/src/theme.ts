@@ -10,6 +10,7 @@ export const lightTheme: DefaultTheme = {
   colors: {
     white: "white",
     black: "black",
+    gray:'gray',
     primaryLight: "#3d8831",
     primary: "#214e26",
     primaryDark: "#0B410D",
@@ -23,6 +24,6 @@ export const lightTheme: DefaultTheme = {
   },
   shadow: {
     soft: "0 1px 4px rgba(0,0,0,0.2)",
-    medium: "",
+    medium: "0px 2px 4px rgba(0, 0, 0, 0.2)",
   },
 };
