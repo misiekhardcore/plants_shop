@@ -1,4 +1,13 @@
 import React, { useState } from "react";
+import styled from "styled-components";
+
+export const InputContainer = styled.div`
+  input,
+  textarea,
+  select {
+    width: 100%;
+  }
+`;
 
 interface InputProps {
   label: string;
@@ -17,7 +26,7 @@ const Input: React.FC<InputProps> = ({
 }) => {
   const [value, setValue] = useState(type === "number" ? 0 : "");
   return (
-    <div className="inputgroup">
+    <InputContainer>
       <label htmlFor={name}>{label}</label>
       {type !== "textarea" ? (
         <input
@@ -39,7 +48,7 @@ const Input: React.FC<InputProps> = ({
           onChange={(e) => setValue((prev) => (prev = e.target.value))}
         ></textarea>
       )}
-    </div>
+    </InputContainer>
   );
 };
 

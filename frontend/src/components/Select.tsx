@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { InputContainer } from "./Input";
 
 interface SelectProps {
   label: string;
@@ -7,10 +8,15 @@ interface SelectProps {
   [x: string]: any;
 }
 
-const Select: React.FC<SelectProps> = ({ label, name, options, ...rest }) => {
+const Select: React.FC<SelectProps> = ({
+  label,
+  name,
+  options,
+  ...rest
+}) => {
   const [value, setValue] = useState(options[0]);
   return (
-    <div className="inputgroup">
+    <InputContainer>
       <label htmlFor={name}>{label}</label>
       <select
         name={name}
@@ -23,7 +29,7 @@ const Select: React.FC<SelectProps> = ({ label, name, options, ...rest }) => {
           <option value={o}>{o.toUpperCase()}</option>
         ))}
       </select>
-    </div>
+    </InputContainer>
   );
 };
 
