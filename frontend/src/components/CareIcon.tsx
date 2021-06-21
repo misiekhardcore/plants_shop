@@ -36,13 +36,13 @@ export const CareIcon: React.FC<CareIconProps> = ({
   const tooltip: string = (() => {
     switch (type) {
       case "light":
-        return "Level of light - " + level;
+        return "Level of light: " + level;
       case "size":
-        return "Size of a plant - " + level;
+        return "Size of a plant: " + level;
       case "temp":
-        return "Lowest temp. - " + temperature + "°C";
+        return "Lowest temp.: " + temperature + "°C";
       case "water":
-        return "Watering - " + level;
+        return "Watering: " + level;
       default:
         return "";
     }
