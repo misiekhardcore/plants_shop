@@ -16,7 +16,7 @@ export const getAllProducts = async (
   >
 ): Promise<void> => {
   try {
-    const totalCount = await Product.find().count((_, c) => c);
+    const totalCount = await Product.find().countDocuments((_, c) => c);
     const {
       limit = 10,
       offset = 0,
