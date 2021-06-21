@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { API_URI } from "../config";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
@@ -70,7 +70,6 @@ const NavbarContainer = styled.div`
 `;
 
 export const Navbar: React.FC = () => {
-  const history = useHistory();
   const dispatch = useAppDispatch();
   const cart = useAppSelector(selectCart);
   const { token } = useAppSelector(selectUser);
@@ -81,12 +80,11 @@ export const Navbar: React.FC = () => {
     if (token) {
       (async () => {
         try {
-          const response = await axios.get(`${API_URI}users/validate`, {
+          await axios.get(`${API_URI}users/validate`, {
             headers: {
               authorization: token,
             },
           });
-          if (response.headers) history.push("/");
         } catch (error) {
           dispatch(logout());
         }
@@ -104,15 +102,19 @@ export const Navbar: React.FC = () => {
           </div>
         </Link>
         <ul>
+          <Link to="/products">
+            <li>All products</li>
+          </Link>
           <Link to="/cart">
             <li className="cart">
               Cart {totalAmount > 0 && <span>{totalAmount}</span>}
             </li>
           </Link>
-          <Link to="/profile">
-            <li>Profile</li>
-          </Link>
-
+          {token && (
+            <Link to="/profile">
+              <li>Profile</li>
+            </Link>
+          )}
           {token ? (
             <li onClick={() => dispatch(logout())}>Log out</li>
           ) : (
