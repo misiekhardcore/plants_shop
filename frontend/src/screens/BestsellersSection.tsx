@@ -8,7 +8,6 @@ import {
   selectBestsellers,
 } from "../redux/slices/bestsellerSlice";
 import { IGetProductsReq } from "../types/types";
-import "./ProductsSection.scss";
 
 interface ProductsSectionProps extends IGetProductsReq {
   title: string;

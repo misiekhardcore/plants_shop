@@ -8,7 +8,6 @@ import {
   selectDiscount,
 } from "../redux/slices/discountSlice";
 import { IGetProductsReq } from "../types/types";
-import "./ProductsSection.scss";
 
 interface DiscountSectionProps extends IGetProductsReq {
   title: string;

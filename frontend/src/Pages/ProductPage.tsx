@@ -14,9 +14,100 @@ import {
 } from "../redux/slices/productsSlice";
 import styled from "styled-components";
 
-import "./ProductPage.scss";
 import { DiscountIcon } from "../components/DiscountIcon";
 import { Container, Row } from "../components/Common";
+
+const ProductHeader = styled.section`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const ProductImageContainer = styled.div<{ size?: "small" | "large" }>`
+  height: 500px;
+  position: relative;
+
+  ${(props) =>
+    props.size === "large"
+      ? `@media (max-width: 768px) {
+        display: none;
+      }`
+      : props.size === "small"
+      ? `img {
+      height: 100%;
+    }
+    @media (min-width: 769px) {
+        display: none;
+    }`
+      : null}
+`;
+
+const ProductImage = styled.img`
+  border-radius: 4px;
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  min-width: 100%;
+  object-fit: cover;
+  cursor: pointer;
+  background-color: ${(props) => props.theme.colors.black};
+
+  &:hover,
+  &focus {
+    opacity: 0.8;
+  }
+`;
+
+const ProductImages = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.5rem;
+
+  img {
+    display: flex;
+    object-fit: cover;
+    height: 100px;
+  }
+
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+`;
+
+const ProductInfo = styled.article`
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-bottom: auto;
+  line-height: 1.5;
+`;
+
+const ProductTitle = styled.h1`
+  text-align: center;
+  font-size: 2rem;
+
+  @media (max-width: 414px) {
+    font-size: 1.5rem;
+  }
+`;
+
+const ProductShortDesc = styled.p`
+  color: ${(props) => props.theme.colors.gray};
+`;
+
+const ProductCare = styled.div`
+  h3 {
+    display: block;
+    width: 100%;
+  }
+  display: flex;
+  justify-content: space-around;
+`;
 
 const RatingAndAddToCartContainer = styled.div`
   display: flex;
@@ -97,10 +188,9 @@ export const ProductPage: React.FC = () => {
   return (
     <Container>
       <Row>
-        <section className="product__header">
-          <div className="product__image large">
-            <img
-              className=" img"
+        <ProductHeader>
+          <ProductImageContainer size="large">
+            <ProductImage
               onClick={() => setToggleGallery(true)}
               src={imgURLs[pictureNumber]}
               alt={name}
@@ -108,13 +198,12 @@ export const ProductPage: React.FC = () => {
             {discount > 0 && (
               <DiscountIcon discount={discount} position="top" />
             )}
-          </div>
-          <article className="product__info">
-            <h1 className="title">{name}</h1>
-            <p className="shortDesc">{description}</p>
-            <div className="product__image small">
-              <img
-                className=" img"
+          </ProductImageContainer>
+          <ProductInfo>
+            <ProductTitle>{name}</ProductTitle>
+            <ProductShortDesc>{description}</ProductShortDesc>
+            <ProductImageContainer size="small">
+              <ProductImage
                 onClick={() => setToggleGallery(true)}
                 src={imgURLs[pictureNumber]}
                 alt={name}
@@ -122,24 +211,23 @@ export const ProductPage: React.FC = () => {
               {discount > 0 && (
                 <DiscountIcon discount={discount} position="bottom" />
               )}
-            </div>
-            <div className="product__images">
+            </ProductImageContainer>
+            <ProductImages>
               {imgURLs.map((image, index) => (
-                <img
+                <ProductImage
                   key={index}
                   src={image}
                   alt={name}
                   onClick={() => setPictureNumber(index)}
-                  className="img"
                 />
               ))}
-            </div>
+            </ProductImages>
             <h3>Care info:</h3>
-            <div className="product__care">
+            <ProductCare>
               <CareIcon type="light" level={light} />
               <CareIcon type="water" level={watering} />
               <CareIcon type="temp" temperature={temperature} />
-            </div>
+            </ProductCare>
             <RatingAndAddToCartContainer>
               <Rating rating={rating} size="big" />
               <AddToCartContainer>
@@ -208,8 +296,8 @@ export const ProductPage: React.FC = () => {
                 </Button>
               </AddToCartContainer>
             </RatingAndAddToCartContainer>
-          </article>
-        </section>
+          </ProductInfo>
+        </ProductHeader>
         <section>
           <article>
             <h2>About this product</h2>
