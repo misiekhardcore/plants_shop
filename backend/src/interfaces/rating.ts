@@ -1,10 +1,8 @@
 import { Document, Model } from "mongoose";
-import { IProduct } from "./product";
-import { IUser } from "./user";
 
 export interface IRating {
-  user: IUser;
-  product: IProduct;
+  user: string;
+  product: string;
   rating: number;
 }
 
