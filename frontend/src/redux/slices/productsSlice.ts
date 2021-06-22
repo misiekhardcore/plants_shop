@@ -34,6 +34,7 @@ const initialState: ProductsState = {
     discount: 0,
     countInStock: 0,
     rating: 5,
+    isRated: null,
     sold: 0,
     imgURLs: [],
     comments: [],
@@ -151,6 +152,30 @@ export const deleteProduct = createAsyncThunk<
   }
 });
 
+export const rateProduct = createAsyncThunk<
+  IProduct,
+  { product: string; rating: number },
+  { rejectValue: SerializedError; state: RootState }
+>(
+  "products/rateProduct",
+  async (values, { rejectWithValue, getState }) => {
+    try {
+      const response = await axios.post<IProduct>(
+        "http://localhost:4000/api/products/rate",
+        values,
+        {
+          headers: {
+            authorization: getState().token.token,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const productsSlice = createSlice({
   name: "products",
   initialState,
@@ -193,6 +218,15 @@ export const productsSlice = createSlice({
       })
       .addCase(createProduct.rejected, (state, action) => {
         state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(rateProduct.fulfilled, (state, action) => {
+        state.products.map((product) =>
+          product._id === action.payload._id ? action.payload : product
+        );
+        state.productDetails = action.payload;
+      })
+      .addCase(rateProduct.rejected, (state, action) => {
         state.error = action.payload;
       })
       .addCase(updateProduct.pending, (state) => {

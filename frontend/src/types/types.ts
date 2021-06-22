@@ -32,6 +32,7 @@ export interface IProduct extends IProductInput {
   countInStock: number;
   discount: number;
   rating: number;
+  isRated: boolean | null;
   sold: number;
   comments: IComment[];
 }

@@ -117,7 +117,12 @@ export const Product: React.FC<ProductProps> = ({ product }) => {
         >
           <Dummy>
             {/* {rating > 0 && ( */}
-            <Rating rating={rating} size="small" absolute />
+            <Rating
+              product={product}
+              rating={rating}
+              size="small"
+              absolute
+            />
             {/* )} */}
             {discount > 0 && (
               <DiscountIcon discount={discount} position="bottom" />

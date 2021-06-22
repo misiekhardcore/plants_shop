@@ -1,5 +1,12 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
+import { useAppDispatch, useAppSelector } from "../hooks/hooks";
+import {
+  rateProduct
+} from "../redux/slices/productsSlice";
+import { selectUser } from "../redux/slices/userSlice";
+import { IProduct } from "../types/types";
 
 const RatingContainer = styled.div<{
   size?: "small" | "medium" | "big";
@@ -48,6 +55,7 @@ const RatingContainer = styled.div<{
 `;
 
 interface RatingProps {
+  product: IProduct;
   rating: number;
   absolute?: boolean;
   style?: React.CSSProperties;
@@ -55,10 +63,15 @@ interface RatingProps {
 }
 
 export const Rating: React.FC<RatingProps> = ({
+  product,
   rating = 0,
   absolute = false,
   ...rest
 }) => {
+  const history = useHistory();
+  const dispatch = useAppDispatch();
+  const { token } = useAppSelector(selectUser);
+  const { isRated, _id } = product;
   const roundedRating = Math.round(rating);
   const wholes = Math.floor(roundedRating / 2);
   const halves = roundedRating % 2;
@@ -77,19 +90,30 @@ export const Rating: React.FC<RatingProps> = ({
   ];
 
   return (
-    <RatingContainer
-      absolute={absolute}
-      title={`${wholes}.${halves ? "5" : "0"} / 5.0`}
-      {...rest}
-    >
-      {stars.map((star, i) => (
-        <img
-          key={i}
-          src={star}
-          alt=""
-          onClick={() => console.log(i + 1)}
-        />
-      ))}
-    </RatingContainer>
+    <div style={{ display: "flex", flexDirection: "column" }}>
+      <RatingContainer
+        absolute={absolute}
+        title={`${wholes}.${halves ? "5" : "0"} / 5.0`}
+        {...rest}
+      >
+        {stars.map((star, i) => (
+          <img
+            key={i}
+            src={star}
+            alt=""
+            onClick={() => {
+              if (!token) history.push("/login");
+              if (!isRated)
+                dispatch(
+                  rateProduct({ product: _id, rating: (i + 1) * 2 })
+                );
+            }}
+          />
+        ))}
+      </RatingContainer>
+      {isRated && (
+        <p style={{ color: "green" }}>You have already rated</p>
+      )}
+    </div>
   );
 };

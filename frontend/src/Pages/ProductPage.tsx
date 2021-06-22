@@ -229,7 +229,11 @@ export const ProductPage: React.FC = () => {
               <CareIcon type="temp" temperature={temperature} />
             </ProductCare>
             <RatingAndAddToCartContainer>
-              <Rating rating={rating} size="big" />
+              <Rating
+                product={productDetails}
+                rating={rating}
+                size="big"
+              />
               <AddToCartContainer>
                 <Price>${price}</Price>
                 <div style={{ display: "flex" }}>
