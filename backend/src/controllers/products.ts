@@ -5,9 +5,24 @@ import {
   IGetProductsReq,
 } from "src/interfaces/common";
 import { CSortBy } from "../interfaces/common";
-import { IProduct, IProductUpdate } from "../interfaces/product";
+import {
+  IProduct,
+  // IProductDocument,
+  IProductUpdate,
+} from "../interfaces/product";
+import { IRatingDocument } from "../interfaces/rating";
 import { Product } from "../models/product.model";
+import { Rating } from "../models/rating.model";
 
+// const ratingsToNumber = async (product: IProductDocument) => {
+//   const ratings = await Rating.find({ product: product._id });
+//   return (
+//     ratings.reduce((a: number, c: IRatingDocument) => a + c.rating, 0) /
+//     ratings.length
+//   );
+// };
+
+// TODO: map objects to get rating and isRated
 export const getAllProducts = async (
   req: CustomReqBody<IGetProductsReq>,
   res: Response<
@@ -24,10 +39,10 @@ export const getAllProducts = async (
       search = {},
     } = req.body;
     const products = await Product.find(search)
-      .populate("Rating")
       .sort(CSortBy[sortBy])
       .limit(limit + 1)
       .skip(offset);
+
     res.status(200).json({
       products: products.slice(0, limit),
       isNext: products.length > limit,
@@ -47,7 +62,21 @@ export const getOneProduct = async (
     const { id } = req.params;
     const product = await Product.findById(id);
     if (!product) return next();
-    res.status(200).json(product);
+
+    let rating = 0;
+    const ratings = await Rating.find({ product: product.id });
+    if (ratings)
+      rating =
+        ratings.reduce((a: number, c: IRatingDocument) => {
+          return a + c.rating;
+        }, 0) / ratings.length;
+
+    const isRated = await Rating.findOne({ user: req.userId });
+    res.status(200).json({
+      ...product._doc,
+      rating,
+      isRated: isRated ? true : false,
+    });
   } catch (error) {
     res.status(500).json({ message: "server error", error });
   }
