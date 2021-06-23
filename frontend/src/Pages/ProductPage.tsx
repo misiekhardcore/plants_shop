@@ -15,7 +15,12 @@ import {
 import styled from "styled-components";
 
 import { DiscountIcon } from "../components/DiscountIcon";
-import { Container, Row } from "../components/Common";
+import {
+  CenterContainer,
+  Container,
+  Loading,
+  Row,
+} from "../components/Common";
 
 const ProductHeader = styled.section`
   display: grid;
@@ -181,9 +186,19 @@ export const ProductPage: React.FC = () => {
 
   usePageTitle(name);
 
-  if (loading) return <h3>Loading...</h3>;
+  if (loading)
+    return (
+      <CenterContainer>
+        <Loading isLoading={true} />
+      </CenterContainer>
+    );
 
-  if (error) return <h3>{JSON.stringify(error, null, 2)}</h3>;
+  if (error)
+    return (
+      <CenterContainer>
+        <h3>{JSON.stringify(error, null, 2)}</h3>
+      </CenterContainer>
+    );
 
   return (
     <Container>

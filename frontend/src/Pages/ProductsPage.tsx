@@ -7,7 +7,12 @@ import {
 } from "react-icons/bs";
 import styled from "styled-components";
 import { Button } from "../components/Button";
-import { Container, Row } from "../components/Common";
+import {
+  Container,
+  Row,
+  CenterContainer,
+  Loading,
+} from "../components/Common";
 import { Product } from "../components/Product";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import { usePageTitle } from "../hooks/usePageTitle";
@@ -77,11 +82,9 @@ const ProductsPage: React.FC<ProductsPageProps> = () => {
 
   if (loading)
     return (
-      <Container>
-        <Row>
-          <h3>Loading...</h3>
-        </Row>
-      </Container>
+      <CenterContainer>
+        <Loading isLoading={true} />
+      </CenterContainer>
     );
 
   if (error)
