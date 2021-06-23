@@ -1,0 +1,11 @@
+{
+  "name": "plant_shop",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/misiekhardcore/plants_shop.git",
+  "author": "misiekhardcore <misiekhardcore@gmail.com>",
+  "scripts": {
+    "start":"concurrently \"npm start --prefix backend\" \"npm start --prefix frontend\""
+  },
+  "license": "MIT"
+}
