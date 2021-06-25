@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useHistory } from "react-router-dom";
 import { Field, Formik } from "formik";
 import {
   Container,
@@ -14,8 +14,16 @@ import { Button } from "../components/Button";
 
 export const RegisterPage: React.FC = () => {
   usePageTitle("Register");
+
+  const history = useHistory();
+
   const dispatch = useAppDispatch();
-  const { error, loading } = useAppSelector(selectUser);
+  const { error, loading, token } = useAppSelector(selectUser);
+
+  useEffect(() => {
+    if (token) history.push("/");
+  }, [token, history]);
+
   return (
     <Container>
       <Row>

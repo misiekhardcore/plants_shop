@@ -1,6 +1,6 @@
 import { Field, Formik } from "formik";
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useHistory } from "react-router-dom";
 import { Button } from "../components/Button";
 import {
   Container,
@@ -15,8 +15,15 @@ import { login, selectUser } from "../redux/slices/userSlice";
 export const LoginPage: React.FC = () => {
   usePageTitle("Login");
 
+  const history = useHistory();
+
   const dispatch = useAppDispatch();
-  const { error, loading } = useAppSelector(selectUser);
+  const { error, loading, token } = useAppSelector(selectUser);
+
+  useEffect(() => {
+    if (token) history.push("/");
+  }, [token, history]);
+
   return (
     <Container>
       <Row>
