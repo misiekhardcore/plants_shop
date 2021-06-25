@@ -7,6 +7,7 @@ import {
 import { CSortBy } from "../interfaces/common";
 import {
   IProduct,
+  IProductDocument,
   // IProductDocument,
   IProductUpdate,
 } from "../interfaces/product";
@@ -14,22 +15,31 @@ import { IRatingDocument } from "../interfaces/rating";
 import { Product } from "../models/product.model";
 import { Rating } from "../models/rating.model";
 
-// const ratingsToNumber = async (product: IProductDocument) => {
-//   const ratings = await Rating.find({ product: product._id });
-//   return (
-//     ratings.reduce((a: number, c: IRatingDocument) => a + c.rating, 0) /
-//     ratings.length
-//   );
-// };
+const ratingsToNumber = async (
+  product: IProductDocument
+): Promise<number> => {
+  try {
+    const ratings = await Rating.find({ product: product._id });
+    if (ratings)
+      return (
+        ratings.reduce(
+          (a: number, c: IRatingDocument) => a + c.rating,
+          0
+        ) / ratings.length
+      );
+    return 0;
+  } catch (error) {
+    return 0;
+  }
+};
 
-// TODO: map objects to get rating and isRated
 export const getAllProducts = async (
   req: CustomReqBody<IGetProductsReq>,
   res: Response<
     | { products: IProduct[]; isNext: boolean; totalCount: number }
     | Error
   >
-): Promise<void> => {
+) => {
   try {
     const totalCount = await Product.find().countDocuments((_, c) => c);
     const {
@@ -43,13 +53,29 @@ export const getAllProducts = async (
       .limit(limit + 1)
       .skip(offset);
 
-    res.status(200).json({
-      products: products.slice(0, limit),
+    const populatedProducts = await Promise.all(
+      products.map(async (product) => {
+        const rating = await ratingsToNumber(product);
+        const isRated = await Rating.findOne({
+          user: req.userId,
+          product: product._id,
+        });
+        return {
+          ...product,
+          ...product._doc,
+          rating,
+          isRated: isRated ? true : false,
+        };
+      })
+    );
+
+    return res.status(200).json({
+      products: populatedProducts.slice(0, limit),
       isNext: products.length > limit,
       totalCount,
     });
   } catch (error) {
-    res.status(500).json({ message: "server error", error });
+    return res.status(500).json({ message: "server error", error });
   }
 };
 
@@ -57,28 +83,25 @@ export const getOneProduct = async (
   req: Request<{ id: string }>,
   res: Response<IProduct | Error>,
   next: NextFunction
-): Promise<void> => {
+) => {
   try {
     const { id } = req.params;
     const product = await Product.findById(id);
     if (!product) return next();
 
-    let rating = 0;
-    const ratings = await Rating.find({ product: product.id });
-    if (ratings)
-      rating =
-        ratings.reduce((a: number, c: IRatingDocument) => {
-          return a + c.rating;
-        }, 0) / ratings.length;
+    const rating = await ratingsToNumber(product);
 
-    const isRated = await Rating.findOne({ user: req.userId });
-    res.status(200).json({
+    const isRated = await Rating.findOne({
+      user: req.userId,
+      product: product._id,
+    });
+    return res.status(200).json({
       ...product._doc,
       rating,
       isRated: isRated ? true : false,
     });
   } catch (error) {
-    res.status(500).json({ message: "server error", error });
+    return res.status(500).json({ message: "server error", error });
   }
 };
 
