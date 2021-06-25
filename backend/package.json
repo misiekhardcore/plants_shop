@@ -23,7 +23,7 @@
   },
   "scripts": {
     "start": "ts-node-dev --respawn --quiet --transpile-only ./src/server.ts",
-    "prod": "tsc && node ./build/server.js"
+    "prod": "tsc && node ./dist/server.js"
   },
   "name": "backend",
   "version": "1.0.0",

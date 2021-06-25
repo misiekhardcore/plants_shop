@@ -108,7 +108,7 @@ export const createProduct = createAsyncThunk<
   async ({ product }, { rejectWithValue }) => {
     try {
       const response = await axios.post<IProduct>(
-        "http://localhost:4000/api/products",
+        `${API_URI}products`,
         product
       );
       return response.data;
@@ -127,7 +127,7 @@ export const updateProduct = createAsyncThunk<
   async ({ product }, { rejectWithValue }) => {
     try {
       const response = await axios.put<IProduct>(
-        "http://localhost:4000/api/products",
+        `${API_URI}products`,
         product
       );
       return response.data;
@@ -161,7 +161,7 @@ export const rateProduct = createAsyncThunk<
   async (values, { rejectWithValue, getState }) => {
     try {
       const response = await axios.post<IProduct>(
-        "http://localhost:4000/api/products/rate",
+        `${API_URI}products/rate`,
         values,
         {
           headers: {
