@@ -118,6 +118,7 @@ export const Product: React.FC<ProductProps> = ({ product }) => {
           <Dummy>
             {/* {rating > 0 && ( */}
             <Rating
+              disabled
               product={product}
               rating={rating}
               size="small"

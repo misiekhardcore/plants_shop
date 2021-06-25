@@ -2,9 +2,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
-import {
-  rateProduct
-} from "../redux/slices/productsSlice";
+import { rateProduct } from "../redux/slices/productsSlice";
 import { selectUser } from "../redux/slices/userSlice";
 import { IProduct } from "../types/types";
 
@@ -60,12 +58,14 @@ interface RatingProps {
   absolute?: boolean;
   style?: React.CSSProperties;
   size?: "small" | "medium" | "big";
+  disabled?: boolean;
 }
 
 export const Rating: React.FC<RatingProps> = ({
   product,
   rating = 0,
   absolute = false,
+  disabled,
   ...rest
 }) => {
   const history = useHistory();
@@ -90,7 +90,13 @@ export const Rating: React.FC<RatingProps> = ({
   ];
 
   return (
-    <div style={{ display: "flex", flexDirection: "column" }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        position: "relative",
+      }}
+    >
       <RatingContainer
         absolute={absolute}
         title={`${wholes}.${halves ? "5" : "0"} / 5.0`}
@@ -102,6 +108,7 @@ export const Rating: React.FC<RatingProps> = ({
             src={star}
             alt=""
             onClick={() => {
+              if (disabled) return;
               if (!token) history.push("/login");
               if (!isRated)
                 dispatch(
@@ -112,7 +119,16 @@ export const Rating: React.FC<RatingProps> = ({
         ))}
       </RatingContainer>
       {isRated && (
-        <p style={{ color: "green" }}>You have already rated</p>
+        <p
+          style={{
+            color: "green",
+            position: "absolute",
+            inset: 0,
+            textAlign: "center",
+          }}
+        >
+          You have already rated
+        </p>
       )}
     </div>
   );
