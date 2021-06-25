@@ -1,5 +1,5 @@
 import { Schema } from "mongoose";
-import { IProductDocument } from "src/interfaces/product";
+import { IProductDocument } from "../interfaces/product";
 
 export const ProductSchema = new Schema<IProductDocument>(
   {
