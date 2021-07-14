@@ -5,7 +5,7 @@ import { signToken } from "../utils/signToken";
 import { CustomReqBody } from "src/interfaces/common";
 
 export const validateToken = async (req: Request, res: Response) => {
-  const user = await User.findById(req.userId);
+  const user = await User.findById(req.userId).select("+password");
   if (!user) return res.status(403).json({ token: null });
   const token = signToken(user);
   return res
@@ -14,14 +14,26 @@ export const validateToken = async (req: Request, res: Response) => {
     .json();
 };
 
+interface ILoginReqBody {
+  usernameOrEmail: string;
+  password: string;
+}
+
+interface IRegisterReqBody {
+  username: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
 export const login = async (
-  req: CustomReqBody<{ usernameOrEmail: string; password: string }>,
+  req: CustomReqBody<ILoginReqBody>,
   res: Response,
   _: NextFunction
 ): Promise<any> => {
   const { password, usernameOrEmail } = req.body;
   try {
-    if (!usernameOrEmail || !password) {
+    if (!(usernameOrEmail && password)) {
       return res.status(400).json({
         message: "Email/Username and/or password cannot be empty",
       });
@@ -29,7 +41,7 @@ export const login = async (
 
     const user = await User.findOne({
       $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
-    });
+    }).select("+password");
 
     if (!user) {
       return res
@@ -46,6 +58,7 @@ export const login = async (
     }
 
     const token = signToken(user);
+
     if (!token) {
       return res
         .status(401)
@@ -55,19 +68,14 @@ export const login = async (
     return res
       .status(200)
       .header("Authorization", `Bearer ${token}`)
-      .json();
+      .json(true);
   } catch (error) {
     return res.status(500).json({ message: "server error", error });
   }
 };
 
 export const register = async (
-  req: CustomReqBody<{
-    username: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
-  }>,
+  req: CustomReqBody<IRegisterReqBody>,
   res: Response,
   _: NextFunction
 ): Promise<any> => {
@@ -112,7 +120,7 @@ export const register = async (
     return res
       .status(201)
       .header("Authorization", `Bearer ${token}`)
-      .json();
+      .json(true);
   } catch (error) {
     return res.status(500).json({
       message: "server error",
@@ -127,7 +135,7 @@ export const getUsers = async (
   __: NextFunction
 ): Promise<void> => {
   try {
-    const users = await User.find().select("-password");
+    const users = await User.find();
     res.status(200).json({ users });
   } catch (error) {
     res.status(500).json({ message: "server error", error });
@@ -135,13 +143,14 @@ export const getUsers = async (
 };
 
 export const getUser = async (
-  req: Request,
+  req: Request<{ id: string }>,
   res: Response,
   __: NextFunction
 ): Promise<void> => {
   try {
-    const { userId } = req;
-    const user = await User.findById(userId).select("-password");
+    // const { userId } = req;
+    const { id } = req.params;
+    const user = await User.findById(id);
     res.status(200).json({ user });
   } catch (error) {
     res.status(500).json({ message: "server error", error });

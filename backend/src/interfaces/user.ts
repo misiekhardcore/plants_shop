@@ -4,7 +4,7 @@ import { MongoResult } from "./common";
 export interface IUser extends MongoResult {
   username: string;
   password: string;
-  email:string;
+  email: string;
 }
 
 export interface IUserDocument extends IUser, Document {}
