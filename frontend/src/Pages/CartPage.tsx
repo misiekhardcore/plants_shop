@@ -1,14 +1,15 @@
 import React from "react";
-import { Container, Row, CenterContainer } from "../components/Common";
-import { useAppSelector } from "../hooks/hooks";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+import { Button } from "../components/Button";
+import { CartProduct } from "../components/CartProduct";
+import { CenterContainer, Container, Row } from "../components/Common";
+import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import { usePageTitle } from "../hooks/usePageTitle";
 import { selectCart } from "../redux/slices/cartSlice";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { CartProduct } from "../components/CartProduct";
+import { createOrder, selectOrder } from "../redux/slices/orderSlice";
 import getTotalAmount from "../redux/utils/getTotalAmount";
 import getTotalPrice from "../redux/utils/getTotalPrice";
-import { Button } from "../components/Button";
 
 const CartGrid = styled.div`
   display: grid;
@@ -29,9 +30,12 @@ const CartSummary = styled.section`
 const CartPage: React.FC = () => {
   usePageTitle("Cart");
 
+  const dispatch = useAppDispatch();
   const cart = useAppSelector(selectCart);
   const totalAmount = getTotalAmount(cart);
   const totalPrice = getTotalPrice(cart).toFixed(2);
+
+  const { order } = useAppSelector(selectOrder);
 
   if (!cart.length)
     return (
@@ -58,10 +62,13 @@ const CartPage: React.FC = () => {
             <p>
               for total price of <strong>${totalPrice}</strong>
             </p>
-            <Button>Check out</Button>
+            <Button onClick={() => dispatch(createOrder({}))}>
+              Check out
+            </Button>
           </CartSummary>
         </CartGrid>
       </Row>
+      <pre>{JSON.stringify(order, null, 2)}</pre>
     </Container>
   );
 };
