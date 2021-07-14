@@ -1,19 +1,19 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
-import counterReducer from "./slices/counterSlice";
 import productsReducer from "./slices/productsSlice";
 import cartReducer from "./slices/cartSlice";
 import discountReducer from "./slices/discountSlice";
 import bestsellerReducer from "./slices/bestsellerSlice";
 import userReducer from "./slices/userSlice";
+import orderReducer from "./slices/orderSlice";
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
     products: productsReducer,
     cart: cartReducer,
     discount: discountReducer,
     bestsellers: bestsellerReducer,
     token: userReducer,
+    order: orderReducer,
   },
 });
 

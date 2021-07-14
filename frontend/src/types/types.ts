@@ -41,6 +41,11 @@ export interface ICartProduct extends IProduct {
   amount: number;
 }
 
+export interface IOrder {
+  products: ICartProduct[];
+  user: IUser;
+}
+
 export interface IUser {
   username: string;
   email: string;
