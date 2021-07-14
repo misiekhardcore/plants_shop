@@ -32,7 +32,7 @@ export const cartSlice = createSlice({
     },
     removeFromCart: (state, action: PayloadAction<{ id: string }>) => {
       const newCart = state.filter((p) => p._id !== action.payload.id);
-      
+
       if (newCart.length === 0) localStorage.removeItem("cart");
       else localStorage.setItem("cart", JSON.stringify(newCart));
 
