@@ -61,7 +61,6 @@ export const getAllProducts = async (
           product: product._id,
         });
         return {
-          ...product,
           ...product._doc,
           rating,
           isRated: isRated ? true : false,
