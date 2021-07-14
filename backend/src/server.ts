@@ -11,6 +11,7 @@ import config from "./config";
 import testRoute from "./routers/test";
 import productsRoute from "./routers/products";
 import userRouter from "./routers/users";
+import orderRouter from "./routers/order";
 // import { importData } from "./import";
 // importData()
 
@@ -58,6 +59,8 @@ router.use(express.json());
 router.use(
   cors({
     exposedHeaders: "Authorization",
+    origin: process.env.ORIGIN,
+    credentials: true,
   })
 );
 
@@ -65,6 +68,7 @@ router.use(
 router.use("/api/test", testRoute);
 router.use("/api/products", productsRoute);
 router.use("/api/users", userRouter);
+router.use("/api/order", orderRouter);
 
 /** Error Handling */
 router.use((_, res) => {
