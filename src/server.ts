@@ -1,18 +1,17 @@
-import express from "express";
-import http from "http";
-import mongoose from "mongoose";
 import cors from "cors";
+import express from "express";
+import mongoose from "mongoose";
 import morgan from "morgan";
-
+import path from "path";
 /** Helpers */
 import config from "./config";
-
+import orderRouter from "./routers/order";
+import productsRoute from "./routers/products";
 /** Routes */
 import testRoute from "./routers/test";
-import productsRoute from "./routers/products";
 import userRouter from "./routers/users";
-import orderRouter from "./routers/order";
-import path from "path";
+
+
 // import { importData } from "./import";
 // importData()
 
@@ -88,8 +87,8 @@ router.use((_, res) => {
 });
 
 /** Create server */
-const httpServer = http.createServer(router);
+// const httpServer = http.createServer(router);
 
-httpServer.listen(port, () => {
+router.listen(port, () => {
   console.log(`🚀 Server running on http://${hostname}:${port}`);
 });
