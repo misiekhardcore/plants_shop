@@ -11,7 +11,7 @@ import CartPage from "./Pages/CartPage";
 import CreateProductPage from "./Pages/CreateProductPage";
 import { LoginPage } from "./Pages/LoginPage";
 import MainPage from "./Pages/MainPage";
-import NoMatchPage from "./Pages/NoMatchPage";
+// import NoMatchPage from "./Pages/NoMatchPage";
 import { ProductPage } from "./Pages/ProductPage";
 import ProductsPage from "./Pages/ProductsPage";
 import { ProfilePage } from "./Pages/ProfilePage";
@@ -36,7 +36,7 @@ const App: React.FC = () => {
             path="/admin/create-product"
             component={CreateProductPage}
           />
-          <Route path="*" component={NoMatchPage} />
+          {/* <Route path="*" component={NoMatchPage} /> */}
         </Switch>
         <Footer />
       </Router>
