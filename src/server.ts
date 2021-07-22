@@ -12,6 +12,7 @@ import testRoute from "./routers/test";
 import productsRoute from "./routers/products";
 import userRouter from "./routers/users";
 import orderRouter from "./routers/order";
+import path from "path";
 // import { importData } from "./import";
 // importData()
 
@@ -64,11 +65,20 @@ router.use(
   })
 );
 
+router.use(express.static(path.join(__dirname, "..", "frontend/build")));
+router.use(express.static("public"));
+
 /** Routes */
 router.use("/api/test", testRoute);
 router.use("/api/products", productsRoute);
 router.use("/api/users", userRouter);
 router.use("/api/order", orderRouter);
+
+router.use((_, res, __) => {
+  res.sendFile(
+    path.join(__dirname, "..", "frontend/build", "index.html")
+  );
+});
 
 /** Error Handling */
 router.use((_, res) => {
