@@ -8,6 +8,7 @@ import { ThemeProvider } from "styled-components";
 import { Footer } from "./components/Footer";
 import { Navbar } from "./components/Navbar";
 import CartPage from "./Pages/CartPage";
+import { CheckoutPage } from "./Pages/CheckoutPage";
 import CreateProductPage from "./Pages/CreateProductPage";
 import { LoginPage } from "./Pages/LoginPage";
 import MainPage from "./Pages/MainPage";
@@ -28,6 +29,7 @@ const App: React.FC = () => {
           <Route exact path="/login" component={LoginPage} />
           <Route exact path="/register" component={RegisterPage} />
           <Route exact path="/cart" component={CartPage} />
+          <Route exact path="/checkout" component={CheckoutPage} />
           <Route exact path="/products" component={ProductsPage} />
           <Route exact path="/products/:id" component={ProductPage} />
           <Route exact path="/profile" component={ProfilePage} />
