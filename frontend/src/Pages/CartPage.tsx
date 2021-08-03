@@ -1,13 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { Button } from "../components/Button";
 import { CartProduct } from "../components/CartProduct";
 import { CenterContainer, Container, Row } from "../components/Common";
-import { useAppDispatch, useAppSelector } from "../hooks/hooks";
+import { useAppSelector } from "../hooks/hooks";
 import { usePageTitle } from "../hooks/usePageTitle";
 import { selectCart } from "../redux/slices/cartSlice";
-import { createOrder, selectOrder } from "../redux/slices/orderSlice";
+import { selectUser } from "../redux/slices/userSlice";
 import getTotalAmount from "../redux/utils/getTotalAmount";
 import getTotalPrice from "../redux/utils/getTotalPrice";
 
@@ -30,12 +30,17 @@ const CartSummary = styled.section`
 const CartPage: React.FC = () => {
   usePageTitle("Cart");
 
-  const dispatch = useAppDispatch();
+  const { token } = useAppSelector(selectUser);
+  const history = useHistory();
+
   const cart = useAppSelector(selectCart);
   const totalAmount = getTotalAmount(cart);
   const totalPrice = getTotalPrice(cart).toFixed(2);
 
-  const { order } = useAppSelector(selectOrder);
+  const buttonHandler = () => {
+    if (!token) return history.push("/login");
+    history.push("/checkout");
+  };
 
   if (!cart.length)
     return (
@@ -62,13 +67,10 @@ const CartPage: React.FC = () => {
             <p>
               for total price of <strong>${totalPrice}</strong>
             </p>
-            <Button onClick={() => dispatch(createOrder({}))}>
-              Check out
-            </Button>
+            <Button onClick={buttonHandler}>Check out</Button>
           </CartSummary>
         </CartGrid>
       </Row>
-      <pre>{JSON.stringify(order, null, 2)}</pre>
     </Container>
   );
 };
