@@ -39,7 +39,7 @@ export const createOrder = createAsyncThunk<
     const order = await axios.post<IOrder>(
       `${API_URI}order`,
       {
-        products: cart,
+        products: cart.map((x) => ({ _id: x._id, amount: x.amount })),
       },
       {
         headers: {
