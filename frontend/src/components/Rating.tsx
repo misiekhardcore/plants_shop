@@ -109,7 +109,7 @@ export const Rating: React.FC<RatingProps> = ({
             alt=""
             onClick={() => {
               if (disabled) return;
-              if (!token) history.push("/login");
+              if (!token) return history.push("/login");
               if (!isRated)
                 dispatch(
                   rateProduct({ product: _id, rating: (i + 1) * 2 })
