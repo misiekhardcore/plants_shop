@@ -1,14 +1,13 @@
 import { NextFunction, Request, Response } from "express";
-import { OrderItem } from "../models/orderItem.model";
 import { CustomReqBody, Error } from "../interfaces/common";
 import { IOrder, IOrderDocument } from "../interfaces/order";
-import { IOrderItem } from "../interfaces/orderItem";
-import { User } from "../models/user.model";
 import { Order } from "../models/order.model";
+import { OrderItem } from "../models/orderItem.model";
+import { User } from "../models/user.model";
 
 export const createOrder = async (
-  req: CustomReqBody<{ products: IOrderItem[] }>,
-  res: Response<IOrderDocument | Error>
+  req: CustomReqBody<{ products: [{ _id: string; amount: number }] }>,
+  res: Response<boolean | Error>
 ) => {
   try {
     const { products } = req.body;
@@ -17,27 +16,27 @@ export const createOrder = async (
     if (!products)
       return res.status(400).json({ message: "User input error" });
 
-    let orderItems: IOrderItem[] = [];
+    let orderItems: string[] = [];
 
     for (const product of products) {
       try {
-        const orderItem = await OrderItem.create({
-          product,
-          quantity: product.amount,
+        const { _id } = await OrderItem.create({
+          product: product._id,
+          amount: product.amount,
         });
 
-        orderItems.push(orderItem);
+        orderItems.push(_id);
       } catch (error) {
         return res.status(500).json({ message: "Server error" });
       }
     }
 
-    const order = await Order.create({
-      user,
+    await Order.create({
+      user: user?._id,
       products: orderItems,
     });
 
-    return res.status(201).json(order);
+    return res.status(201).json(true);
   } catch (error) {
     return res.status(500).json({ message: "server error" });
   }
@@ -51,7 +50,7 @@ export const getOrder = async (
   try {
     const { id } = req.params;
 
-    if (id.length != 12)
+    if (id.length != 24)
       return res.status(400).json({ message: "invalid id" });
 
     const order = await Order.findOne({
