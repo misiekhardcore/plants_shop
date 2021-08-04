@@ -17,12 +17,18 @@ export interface OrderState {
 
 const initialState: OrderState = {
   order: {
+    _id: "",
     products: [],
     user: {
       email: "",
       username: "",
       password: "",
     },
+    createdAt: "",
+    delivered: false,
+    deliveryDate: null,
+    paid: false,
+    paymentDate: null,
   },
   orders: [],
   loading: false,
@@ -78,7 +84,7 @@ export const getOrder = createAsyncThunk<
 
 export const getOrders = createAsyncThunk<
   IOrder[],
-  any,
+  void,
   { rejectValue: SerializedError; state: RootState }
 >("order/getOrders", async (_, { rejectWithValue, getState }) => {
   try {

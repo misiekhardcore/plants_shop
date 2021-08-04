@@ -4,7 +4,11 @@ import { IUser } from "./user";
 
 export interface IOrder {
   user: IUser | string;
-  products: IOrderItem[];
+  products: IOrderItem[] | string[];
+  paid: boolean;
+  paymentDate: Date | null;
+  delivered: boolean;
+  deliveryDate: Date | null;
 }
 
 export interface IOrderDocument extends IOrder, Document {}

@@ -42,8 +42,14 @@ export interface ICartProduct extends IProduct {
 }
 
 export interface IOrder {
+  _id: string;
   products: ICartProduct[];
   user: IUser;
+  createdAt: string;
+  paid: boolean;
+  paymentDate: Date | null;
+  delivered: boolean;
+  deliveryDate: Date | null;
 }
 
 export interface IUser {
