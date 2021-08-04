@@ -148,10 +148,13 @@ export const getUser = async (
   __: NextFunction
 ): Promise<void> => {
   try {
-    // const { userId } = req;
+    const { userId } = req;
     const { id } = req.params;
-    const user = await User.findById(id);
-    res.status(200).json({ user });
+    let user;
+    if (!id) user = await User.findById(userId);
+    else user = await User.findById(id);
+    if (!user) throw new Error();
+    res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ message: "server error", error });
   }
