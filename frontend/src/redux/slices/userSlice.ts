@@ -71,7 +71,7 @@ export const register = createAsyncThunk<
 
 export const getUser = createAsyncThunk<
   IUser,
-  null,
+  void,
   {
     state: RootState;
     rejectValue: SerializedError;
